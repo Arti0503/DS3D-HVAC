@@ -1,0 +1,438 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace CCEPL_CAD.Models
+{
+    [Serializable]
+    public class Faults
+    {
+        public List<Fault> FaultList;
+    }
+
+    [Serializable]
+    public class Fault
+    {
+        public int FaultIndex;
+        public string Message;
+        public List<Step> Steps;
+        public bool IsCompleted = false;
+    }
+
+    [Serializable]
+    public class Step
+    {
+        public string Message;
+        public ToolType RequireToolType;
+        public string ComponentName;
+        public string ComponentCode;
+        public List<IntrectableComponentPart> Targets;
+        public AnimationClip AnimationClip;
+        [Range(-1,1)]
+        public int AnimationSpeed;
+        public bool IsCompleted = false;
+
+        [Header("Camera Focus Settings")]
+        public bool UseCustomCameraTransform;
+        public Vector3 TargetCameraPosition;
+        public Vector3 TargetCameraRotation;
+
+        public bool IsDisplayeText = false;
+        public string DisaplayMessage = string.Empty;
+
+        public Step Clone()
+        {
+            return new Step
+            {
+                Message = this.Message,
+                RequireToolType = this.RequireToolType,
+                ComponentName = this.ComponentName,
+                ComponentCode = this.ComponentCode,
+                Targets = this.Targets != null ? new List<IntrectableComponentPart>(this.Targets) : new List<IntrectableComponentPart>(),
+                AnimationClip = this.AnimationClip,
+                AnimationSpeed = this.AnimationSpeed,
+                IsCompleted = this.IsCompleted,
+                UseCustomCameraTransform = this.UseCustomCameraTransform,
+                TargetCameraPosition = this.TargetCameraPosition,
+                TargetCameraRotation = this.TargetCameraRotation,
+                IsDisplayeText = this.IsDisplayeText,
+                DisaplayMessage = this.DisaplayMessage
+            };
+        }
+
+        public List<StepValidationError> ValidateStep(Dictionary<ToolType, RegisteredToolInfo> registeredToolMap = null)
+        {
+            var errors = new List<StepValidationError>();
+            bool isVisualStep = FaultManager.IsVisualInspectionStep(this);
+
+            if (Targets != null && Targets.Count > 0)
+            {
+                for (int i = 0; i < Targets.Count; i++)
+                {
+                    if (Targets[i] == null)
+                    {
+                        errors.Add(new StepValidationError(
+                            true,
+                            $"Target list size is {Targets.Count}, but slot #{i} is UNASSIGNED (null)!"
+                        ));
+                    }
+                }
+            }
+            else if (!isVisualStep)
+            {
+                // Interactive tool steps REQUIRE target objects
+                errors.Add(new StepValidationError(
+                    true,
+                    $"Requires tool '{RequireToolType}', but no Target objects are assigned!"
+                ));
+            }
+
+            if (!isVisualStep && registeredToolMap != null)
+            {
+                if (!registeredToolMap.TryGetValue(RequireToolType, out RegisteredToolInfo info) || !info.IsPresent)
+                {
+                    errors.Add(new StepValidationError(
+                        true,
+                        $"Required Tool '{RequireToolType}' is NOT present in ToolsDataSO ScriptableObject!"
+                    ));
+                }
+                else if (!info.HasToolObject)
+                {
+                    errors.Add(new StepValidationError(
+                        true,
+                        $"Required Tool '{RequireToolType}' in ToolsDataSO has NO 'ToolObject' assigned (null)!"
+                    ));
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(Message))
+            {
+                errors.Add(new StepValidationError(false, "Step description message is empty."));
+            }
+            
+            if (AnimationClip != null && AnimationSpeed == 0)
+            {
+                errors.Add(new StepValidationError(
+                    true,
+                    "An AnimationClip is assigned, but AnimationSpeed is set to 0!"
+                ));
+            }
+            
+            if(IsDisplayeText && string.IsNullOrWhiteSpace(DisaplayMessage))
+            {
+                errors.Add(new StepValidationError(
+                    true,
+                    "IsDisplayeText is enabled, but DisaplayMessage is empty!"
+                ));
+            }
+
+            return errors;
+        }
+    }
+
+    [Serializable]
+    public struct RegisteredToolInfo
+    {
+        public ToolType ToolType;
+        public bool IsPresent;
+        public bool HasToolObject;
+        public bool HasToolIcon;
+
+        public RegisteredToolInfo(ToolType toolType, bool isPresent, bool hasToolObject, bool hasToolIcon)
+        {
+            ToolType = toolType;
+            IsPresent = isPresent;
+            HasToolObject = hasToolObject;
+            HasToolIcon = hasToolIcon;
+        }
+    }
+
+    [Serializable]
+    public struct StepValidationError
+    {
+        public bool IsError;
+        public string Message;
+
+        public StepValidationError(bool isError, string message)
+        {
+            IsError = isError;
+            Message = message;
+        }
+    }
+
+    [Serializable]
+    public class ToolData
+    {
+        public string ToolName;
+        public Sprite ToolIcon;
+        public ToolType ToolType;
+        public ToolObject ToolObject;
+    }
+
+    [Serializable]
+    public class ComponentData
+    {
+        public string ComponentName;
+        public Sprite ComponentIcon;
+        public string ComponentCode;
+    }
+
+    [Serializable]
+    public class FaultTabData
+    {
+        public string Fault;
+    }
+
+    [Serializable]
+    public class ToolsData
+    {
+        public ToolType ToolType;
+        public Sprite ToolIcon;
+        public ToolObject ToolObject;
+    }
+
+    public enum ToolType
+    {
+        None = -1,
+        SquareKey7X7,
+        AirGun,
+        AirLineCaps,
+        AlignmentGauge,
+        AllenKeySet,
+        AllenKeys,
+        AntiFrettingCompound,
+        BearingPuller,
+        BearingPullerSet,
+        BearingTools,
+        BearingWithdrawalPlate,
+        BlankingCaps,
+        Blower,
+        BogieFrameLiftingCrane,
+        Bracket,
+        BrakeAdjustmentWrench,
+        BrassDrift,
+        BristleBrush,
+        BristleBrushOrCloth,
+        Bristles,
+        CalibratedThermometer,
+        CarbodyLiftingCraneOrJacks,
+        ClampThermometer,
+        CleaningSolvent,
+        Cloth,
+        CompressedAir,
+        CompressedAirBlowGun,
+        CompressedAirGun,
+        DimensionalInspection,
+        DriftPunch,
+        EarObservation,
+        ElectronicLeakDetector,
+        FeelerGauge,
+        FinComb,
+        FlashLight,
+        GreaseApplicator,
+        GreaseGun,
+        GuideRope,
+        Hammer,
+        HandTool,
+        HighPressureAirHose,
+        HoldingFixture,
+        HotWaterSoftensTheBristles,
+        HydraulicJack,
+        HydraulicPress,
+        HydraulicPuller,
+        HydraulicWheelPress,
+        InspectionLamp,
+        InspectionMirror,
+        InsulatedHandGloves,
+        InsulatedElectricalHandGloves,
+        InsulatedGloves,
+        InsulatedSafetyGloves,
+        Lifting,
+        LiftingBeam,
+        LiftingChain,
+        LiftingDevice,
+        LiftingSling,
+        LintFreeCloth,
+        ListeningCheck,
+        ManifoldGaugeSet,
+        ManualPullCheck,
+        MeasurementGauge,
+        Multimeter,
+        NozzleGun,
+        OpenEndSpannerSet,
+        OverheadCrane,
+        PaperCloth,
+        PinPunch,
+        PipeWrench,
+        Pliers,
+        Plugs,
+        PneumaticLeakDetectionSpray,
+        PortableFixtures,
+        PositioningTools,
+        PryBar,
+        PryBar_IfRequired,
+        PTE_PressureTestEquipment,
+        Puller,
+        Punch,
+        RatchetWrench,
+        SafetyGloves,
+        SafetyStands,
+        Screwdriver,
+        ScrewdriverSet,
+        Slings,
+        Socket,
+        SocketSet,
+        SocketWrench,
+        SocketWrenchSet,
+        Sockets,
+        SoftBristleBrus,
+        SoftBristleBrush,
+        SoftNonMetallicBristledBrush,
+        SoftFaceHammer,
+        Spanner,
+        SpannerKit,
+        SpannerSet,
+        SpringCompressor,
+        StandardWrench,
+        StandardWrenches,
+        StayRod,
+        StraightEdge,
+        SupportStand,
+        TaggingLabels,
+        Tester,
+        Thermometer,
+        ThermometerMultimeter,
+        ToolKit,
+        TorqueWrench,
+        Vacuum,
+        VacuumCleaner,
+        VacuumCleanerWithBrushNozzle,
+        Visual,
+        VisualCheck,
+        VisualCheckInThroghtSightGlass,
+        VisualInspection,
+        VisualInspectionLamp,
+        WetCloth,
+        WheelPuller,
+        WireCutter,
+        LongNosePlier,
+        StepLadder,
+        ServiceKey
+    }
+
+    public enum FaultStage
+    {
+        Start,
+        ChooseTheTool,
+        ChooseTheComponent
+    }
+
+    public enum ApplicationMode
+    {
+        TestMode,
+        ExamMode
+    }
+
+    [Serializable]
+    public class InteractableComponentData
+    {
+        public string ComponentName;
+        public string ComponentCode;
+    }
+    
+    [Serializable]
+    public class AnimationLayerWaight
+    {
+        public string LayerName;
+        public List<int> LayerIndexs;
+    }
+    
+    [Serializable]
+    public class AnimationColorChange
+    {
+        public string AnimationName;
+        public Material AnimationMaterial;
+        public Color Color1;
+        public Color Color2;
+    }
+
+    [Serializable]
+    public class BlendShapeChange
+    {
+        public string BlendShapeName;
+        public List<int> BlendShapeIndexs;
+        public SkinnedMeshRenderer TargetMesh;
+    }
+
+    [Serializable]
+    public class SpeedSliderData
+    {
+        public string ParameterName;
+        public Slider SliderComponent;
+    }
+    
+    [Serializable]
+    public class AmplitudeSliderData
+    {
+        public string LayerName;
+        public List<int> LayerIndex;
+        public Slider SliderComponent;
+    }
+    
+    
+    [Serializable]
+    public class AnimationConfigData
+    {
+        public SystemSettings Bogie;
+        public SystemSettings Hvac;
+        public SystemSettings Door;
+    }
+
+    [Serializable]
+    public class SystemSettings
+    {
+        public List<NumericParameter> Speed;
+        public List<NumericParameter> Amplitude;
+        public List<BooleanParameter> Boolean;
+    }
+
+    [Serializable]
+    public class NumericParameter
+    {
+        public string Name;
+        public float Value;
+    }
+
+    [Serializable]
+    public class BooleanParameter
+    {
+        public string Name;
+        public bool Value;
+    }
+
+    [Serializable]
+    public enum Modes
+    {
+        None,
+        Easy,
+        Normal
+    }
+    
+    [Serializable]
+    public class ColorSliderData
+    {
+        public Material TargetMaterial;
+        public Color StartColor;
+        public Color EndColor;
+        public Slider SliderComponent;
+    }
+
+    [Serializable]
+    public class BlendShapeChangeData
+    {
+        public List<int> BlendShapeIndexs;
+        public SkinnedMeshRenderer TargetMesh;
+        public Slider SliderComponent;
+    }
+}
