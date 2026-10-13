@@ -230,7 +230,6 @@ namespace CCEPL_CAD
 
                 _lastReceivedMessage = message;
                 Debug.Log($"[UDPManager] Received -> {message}");
-                return;
 
                 if (message[0] == '{' || message[0] == '[')
                 {
@@ -294,6 +293,7 @@ namespace CCEPL_CAD
                 {
                     // Send out a copy to preserve isolation for event listeners
                     EventManager.ReceivedUDPData?.Invoke(new List<float>(_cachedFloatBuffer));
+                    SendString(string.Join(",", _cachedFloatBuffer));
                 }
             }
             catch (Exception ex)
@@ -318,6 +318,7 @@ namespace CCEPL_CAD
             if (_cachedFloatBuffer.Count > 0)
             {
                 EventManager.ReceivedUDPData?.Invoke(new List<float>(_cachedFloatBuffer));
+                SendString(string.Join(",", _cachedFloatBuffer));
             }
         }
 

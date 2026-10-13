@@ -1,0 +1,74 @@
+{
+  "Hvac": {
+    "Speed": [
+      {
+        "Name": "BlueArrowOut",
+        "Value": 5.0
+      },
+      {
+        "Name": "Fan1",
+        "Value": 5.0
+      },
+      {
+        "Name": "Fan2",
+        "Value": 5.0
+      },
+      {
+        "Name": "GreenArrowIN1",
+        "Value": 5.0
+      },
+      {
+        "Name": "GreenArrowIN2",
+        "Value": 5.0
+      },
+      {
+        "Name": "YellowArrowIn",
+        "Value": 5.0
+      }
+    ],
+    "Amplitude": [
+      {
+        "Name": "RedArrow_Inlet",
+        "Value": 5.0
+      },
+      {
+        "Name": "RedArrow_Outlet",
+        "Value": 5.0
+      },
+      {
+        "Name": "BlueArrow_Outlet",
+        "Value": 5.0
+      },
+      {
+        "Name": "GreenArrow_Inlet",
+        "Value": 5.0
+      },
+      {
+        "Name": "YellowArrow_Inlet",
+        "Value": 5.0
+      },
+      {
+        "Name": "FADL",
+        "Value": 0.0
+      },
+      {
+        "Name": "FADR",
+        "Value": 0.0
+      },
+      {
+        "Name": "RAD",
+        "Value": 0.0
+      }
+    ],
+    "Boolean": [
+      {
+        "Name": "ShowHideObjects",
+        "Value": false
+      },
+      {
+        "Name": "Application Quit",
+        "Value": false
+      }
+    ]
+  }
+}
