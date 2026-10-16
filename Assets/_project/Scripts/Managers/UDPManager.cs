@@ -17,9 +17,13 @@ namespace CCEPL_CAD
     {
         [Header("UDP Settings")]
         [SerializeField] private string _remoteIP = "127.0.0.1";
-        [SerializeField] private int _listenPort = 5005;
-        [SerializeField] private int _remotePort = 5006;
+        [SerializeField] private int _listenPort = 9000;
+        [SerializeField] private int _remotePort = 5005;
         [SerializeField] private bool _autoUpdateRemoteIPFromSender = true;
+
+        [Header("Step Telemetry Settings (to LabVIEW)")]
+        [SerializeField] private StepSendFormat _stepSendFormat = StepSendFormat.JSON;
+        [SerializeField] private bool _sendFaultStartedAck = true;
 
         private UdpClient _receiver;
         private UdpClient _sender;
@@ -43,11 +47,21 @@ namespace CCEPL_CAD
         private void OnEnable()
         {
             EventManager.SubmitFault += SubmitFault;
+            EventManager.OnStepAccomplished += HandleStepAccomplished;
+            EventManager.OnFaultFinished += HandleFaultFinished;
+            EventManager.OnFaultStarted += HandleFaultStarted;
+            EventManager.OnCompressionHighlightsChanged += HandleCompressionHighlightsChanged;
+            EventManager.OnArrowsChanged += HandleArrowsChanged;
         }
 
         private void OnDisable()
         {
             EventManager.SubmitFault -= SubmitFault;
+            EventManager.OnStepAccomplished -= HandleStepAccomplished;
+            EventManager.OnFaultFinished -= HandleFaultFinished;
+            EventManager.OnFaultStarted -= HandleFaultStarted;
+            EventManager.OnCompressionHighlightsChanged -= HandleCompressionHighlightsChanged;
+            EventManager.OnArrowsChanged -= HandleArrowsChanged;
         }
 
         private void Start()
@@ -83,6 +97,14 @@ namespace CCEPL_CAD
 
                 // Sender Setup
                 _sender = new UdpClient();
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+                try
+                {
+                    const int SIO_UDP_CONNRESET = -1744830452; // 0x9800000C
+                    _sender.Client.IOControl(SIO_UDP_CONNRESET, new byte[] { 0 }, new byte[] { 0 });
+                }
+                catch { }
+#endif
 
                 _isRunning = true;
                 _receiveThread = new Thread(ReceiveLoop)
@@ -150,9 +172,14 @@ namespace CCEPL_CAD
                         {
                             lock (_endpointLock)
                             {
-                                if (!_remoteEndPoint.Address.Equals(senderEndPoint.Address))
+                                var addr = senderEndPoint.Address;
+                                if (addr.IsIPv4MappedToIPv6)
                                 {
-                                    _remoteEndPoint = new IPEndPoint(senderEndPoint.Address, _remotePort);
+                                    addr = addr.MapToIPv4();
+                                }
+                                if (!_remoteEndPoint.Address.Equals(addr))
+                                {
+                                    _remoteEndPoint = new IPEndPoint(addr, _remotePort);
                                 }
                             }
                         }
@@ -198,19 +225,117 @@ namespace CCEPL_CAD
 
             try
             {
-                byte[] data = Encoding.ASCII.GetBytes(message);
+                byte[] data = Encoding.UTF8.GetBytes(message);
 
                 lock (_endpointLock)
                 {
-                    _sender.Send(data, data.Length, _remoteEndPoint);
+                    if (_remoteEndPoint != null)
+                    {
+                        _sender.Send(data, data.Length, _remoteEndPoint);
+                    }
                 }
 
                 Debug.Log($"[UDPManager] SENT -> {message}");
+            }
+            catch (SocketException sex)
+            {
+                if (sex.ErrorCode != 10054)
+                {
+                    Debug.LogWarning($"[UDPManager] Socket warning ({sex.ErrorCode}): {sex.Message}");
+                }
             }
             catch (Exception ex)
             {
                 Debug.LogError($"[UDPManager] Send Failed: {ex.Message}");
             }
+        }
+
+        #endregion
+
+        #region Telemetry & Step Progress Handlers
+
+        private void HandleStepAccomplished(int faultCode, int stepNumber, int wrongAttempts, int totalSteps, bool isFaultCompleted)
+        {
+            if (_stepSendFormat == StepSendFormat.RawNumber || _stepSendFormat == StepSendFormat.Both)
+            {
+                SendString(stepNumber.ToString());
+            }
+
+            if (_stepSendFormat == StepSendFormat.JSON || _stepSendFormat == StepSendFormat.Both)
+            {
+                var payload = new StepProgressPayload
+                {
+                    @event = "step_completed",
+                    fault_code = faultCode,
+                    step_number = stepNumber,
+                    wrong_attempts = wrongAttempts,
+                    total_steps = totalSteps,
+                    status = "success",
+                    is_fault_completed = isFaultCompleted,
+                    compression_highlights = isFaultCompleted,
+                    arrows_active = isFaultCompleted
+                };
+                string json = JsonConvert.SerializeObject(payload, Formatting.None);
+                SendString(json);
+            }
+        }
+
+        private void HandleFaultFinished(int faultCode, int totalSteps, List<int> wrongAttemptsPerStep)
+        {
+            var payload = new FaultCompletedPayload
+            {
+                @event = "fault_completed",
+                fault_code = faultCode,
+                status = "success",
+                total_steps = totalSteps,
+                wrong_attempts_per_step = wrongAttemptsPerStep,
+                is_fault_completed = true,
+                compression_highlights = true,
+                arrows_active = true
+            };
+            string json = JsonConvert.SerializeObject(payload, Formatting.None);
+            SendString(json);
+        }
+
+        private void HandleFaultStarted(int faultCode, int totalSteps)
+        {
+            if (!_sendFaultStartedAck) return;
+
+            var payload = new FaultStartedPayload
+            {
+                @event = "fault_started",
+                fault_code = faultCode,
+                total_steps = totalSteps,
+                status = "started",
+                compression_highlights = false,
+                arrows_active = false
+            };
+            string json = JsonConvert.SerializeObject(payload, Formatting.None);
+            SendString(json);
+        }
+
+        private void HandleCompressionHighlightsChanged(bool isVisible)
+        {
+            var payload = new CompressionHighlightsPayload
+            {
+                @event = "compression_highlights_changed",
+                compression_highlights = isVisible,
+                status = isVisible ? "enabled" : "disabled"
+            };
+            string json = JsonConvert.SerializeObject(payload, Formatting.None);
+            SendString(json);
+        }
+
+        private void HandleArrowsChanged(bool isVisible)
+        {
+            var payload = new ArrowsPayload
+            {
+                @event = "arrows_changed",
+                arrows_active = isVisible,
+                status = isVisible ? "enabled" : "disabled"
+            };
+            string json = JsonConvert.SerializeObject(payload, Formatting.None);
+            SendString(json);
         }
 
         #endregion
@@ -225,10 +350,9 @@ namespace CCEPL_CAD
             {
                 string message = Encoding.UTF8.GetString(data).Trim();
 
-                if (string.IsNullOrEmpty(message) || message == _lastReceivedMessage)
+                if (string.IsNullOrEmpty(message))
                     return;
 
-                _lastReceivedMessage = message;
                 Debug.Log($"[UDPManager] Received -> {message}");
 
                 if (message[0] == '{' || message[0] == '[')
@@ -237,7 +361,7 @@ namespace CCEPL_CAD
                 }
                 else
                 {
-                    DecodeCsvPacket(message);
+                    DecodeNonJsonPacket(message);
                 }
             }
             catch (Exception ex)
@@ -252,10 +376,18 @@ namespace CCEPL_CAD
             {
                 EventManager.OnFaultsReceived?.Invoke(jsonString);
 
-                SystemSettings targetSettings = null;
-                JObject parsedObject = JObject.Parse(jsonString);
+                JToken token = JToken.Parse(jsonString);
+                if (token is not JObject parsedObject) return;
 
-                // Check for Root AnimationConfigData structure (case-insensitive)
+                // 1. Check for Command & Fault Triggering
+                if (TryProcessJsonCommand(parsedObject))
+                {
+                    return;
+                }
+
+                // 2. Fallback to SystemSettings for Slider/Animation Parameters (Speed, Amplitude, Boolean)
+                SystemSettings targetSettings = null;
+
                 if (parsedObject.TryGetValue("Hvac", StringComparison.OrdinalIgnoreCase, out JToken hvacToken))
                 {
                     targetSettings = hvacToken.ToObject<SystemSettings>();
@@ -270,7 +402,6 @@ namespace CCEPL_CAD
                 }
                 else
                 {
-                    // Fallback to direct SystemSettings payload
                     targetSettings = parsedObject.ToObject<SystemSettings>();
                 }
 
@@ -285,13 +416,31 @@ namespace CCEPL_CAD
                 {
                     for (int i = 0; i < targetSettings.Boolean.Count; i++)
                     {
-                        _cachedFloatBuffer.Add(targetSettings.Boolean[i].Value ? 1.0f : 0.0f);
+                        var bParam = targetSettings.Boolean[i];
+                        _cachedFloatBuffer.Add(bParam.Value ? 1.0f : 0.0f);
+
+                        if (!string.IsNullOrEmpty(bParam.Name))
+                        {
+                            if (string.Equals(bParam.Name, "Compression_Highlights", StringComparison.OrdinalIgnoreCase) ||
+                                string.Equals(bParam.Name, "CompressionHighlights", StringComparison.OrdinalIgnoreCase) ||
+                                string.Equals(bParam.Name, "CompresserHighLight", StringComparison.OrdinalIgnoreCase) ||
+                                string.Equals(bParam.Name, "CompressorHighlights", StringComparison.OrdinalIgnoreCase) ||
+                                string.Equals(bParam.Name, "Compression", StringComparison.OrdinalIgnoreCase))
+                            {
+                                EventManager.RequestToggleCompressionHighlights?.Invoke(bParam.Value);
+                            }
+                            else if (string.Equals(bParam.Name, "Arrows", StringComparison.OrdinalIgnoreCase) ||
+                                     string.Equals(bParam.Name, "Arrows_Active", StringComparison.OrdinalIgnoreCase) ||
+                                     string.Equals(bParam.Name, "Idle_Arrows", StringComparison.OrdinalIgnoreCase))
+                            {
+                                EventManager.RequestToggleArrows?.Invoke(bParam.Value);
+                            }
+                        }
                     }
                 }
 
                 if (_cachedFloatBuffer.Count > 0)
                 {
-                    // Send out a copy to preserve isolation for event listeners
                     EventManager.ReceivedUDPData?.Invoke(new List<float>(_cachedFloatBuffer));
                     SendString(string.Join(",", _cachedFloatBuffer));
                 }
@@ -300,6 +449,246 @@ namespace CCEPL_CAD
             {
                 Debug.LogError($"[UDPManager] JSON Parse Error: {ex.Message}");
             }
+        }
+
+        private bool TryProcessJsonCommand(JObject obj)
+        {
+            // A. Check for explicit "command" field
+            if (obj.TryGetValue("command", StringComparison.OrdinalIgnoreCase, out JToken cmdToken))
+            {
+                string cmd = cmdToken.ToString().ToLowerInvariant();
+                if (cmd == "trigger_fault" || cmd == "start_fault" || cmd == "trigger" || cmd == "fault")
+                {
+                    if (TryExtractFaultCode(obj, out int fCode))
+                    {
+                        Debug.Log($"[UDPManager] Triggering Fault from JSON command: {fCode}");
+                        EventManager.RequestTriggerFault?.Invoke(fCode);
+                        return true;
+                    }
+                }
+                else if (cmd == "reset" || cmd == "reset_fault" || cmd == "stop")
+                {
+                    Debug.Log("[UDPManager] Resetting Fault from JSON command");
+                    EventManager.RequestResetFault?.Invoke();
+                    var resetAck = new FaultResetPayload();
+                    SendString(JsonConvert.SerializeObject(resetAck, Formatting.None));
+                    return true;
+                }
+                else if (cmd == "set_compression_highlights" || cmd == "compression_highlights" || cmd == "set_highlights" || cmd == "toggle_compression_highlights" || cmd == "compression")
+                {
+                    bool state = true;
+                    if (obj.TryGetValue("state", StringComparison.OrdinalIgnoreCase, out JToken stateToken))
+                    {
+                        state = ExtractBooleanFromToken(stateToken);
+                    }
+                    else if (obj.TryGetValue("value", StringComparison.OrdinalIgnoreCase, out JToken valToken))
+                    {
+                        state = ExtractBooleanFromToken(valToken);
+                    }
+                    Debug.Log($"[UDPManager] Compression Highlights Command -> {state}");
+                    EventManager.RequestToggleCompressionHighlights?.Invoke(state);
+                    return true;
+                }
+                else if (cmd == "set_arrows" || cmd == "arrows" || cmd == "set_arrows_active" || cmd == "toggle_arrows")
+                {
+                    bool state = true;
+                    if (obj.TryGetValue("state", StringComparison.OrdinalIgnoreCase, out JToken stateToken))
+                    {
+                        state = ExtractBooleanFromToken(stateToken);
+                    }
+                    else if (obj.TryGetValue("value", StringComparison.OrdinalIgnoreCase, out JToken valToken))
+                    {
+                        state = ExtractBooleanFromToken(valToken);
+                    }
+                    Debug.Log($"[UDPManager] Arrows Command -> {state}");
+                    EventManager.RequestToggleArrows?.Invoke(state);
+                    return true;
+                }
+                /*
+                else if (cmd == "skip" || cmd == "skip_step")
+                {
+                    Debug.Log("[UDPManager] Skipping Step from JSON command");
+                    EventManager.RequestSkipStep?.Invoke();
+                    return true;
+                }
+                else if (cmd == "back" || cmd == "back_step" || cmd == "previous_step" || cmd == "previous" || cmd == "reverse_step")
+                {
+                    Debug.Log("[UDPManager] Previous Step requested from JSON command");
+                    EventManager.RequestPreviousStep?.Invoke();
+                    return true;
+                }
+                */
+            }
+
+            // B. Check for direct fault code property: { "fault": 101 } or { "fault_code": 101 }
+            if (TryExtractFaultCode(obj, out int directFaultCode))
+            {
+                Debug.Log($"[UDPManager] Triggering Fault from direct JSON property: {directFaultCode}");
+                EventManager.RequestTriggerFault?.Invoke(directFaultCode);
+                return true;
+            }
+
+            // C. Check for direct compression highlights property: { "compression_highlights": true/false }
+            string[] compKeys = { "compression_highlights", "compression_highlight", "compresser_highlight", "compressor_highlight", "compressor_highlights" };
+            foreach (var key in compKeys)
+            {
+                if (obj.TryGetValue(key, StringComparison.OrdinalIgnoreCase, out JToken cToken))
+                {
+                    bool state = ExtractBooleanFromToken(cToken);
+                    Debug.Log($"[UDPManager] Direct Compression Highlights Property -> {state}");
+                    EventManager.RequestToggleCompressionHighlights?.Invoke(state);
+                    return true;
+                }
+            }
+
+            // D. Check for direct arrows property: { "arrows": true/false }
+            string[] arrowKeys = { "arrows", "arrows_active", "arrow_active", "idle_arrows" };
+            foreach (var key in arrowKeys)
+            {
+                if (obj.TryGetValue(key, StringComparison.OrdinalIgnoreCase, out JToken aToken))
+                {
+                    bool state = ExtractBooleanFromToken(aToken);
+                    Debug.Log($"[UDPManager] Direct Arrows Property -> {state}");
+                    EventManager.RequestToggleArrows?.Invoke(state);
+                    return true;
+                }
+            }
+
+            // E. Check for nested { "Hvac": { ... } }
+            if (obj.TryGetValue("Hvac", StringComparison.OrdinalIgnoreCase, out JToken hvacToken) && hvacToken is JObject hvacObj)
+            {
+                if (TryExtractFaultCode(hvacObj, out int nestedCode))
+                {
+                    Debug.Log($"[UDPManager] Triggering Fault from nested Hvac JSON: {nestedCode}");
+                    EventManager.RequestTriggerFault?.Invoke(nestedCode);
+                    return true;
+                }
+
+                foreach (var key in compKeys)
+                {
+                    if (hvacObj.TryGetValue(key, StringComparison.OrdinalIgnoreCase, out JToken cToken))
+                    {
+                        bool state = ExtractBooleanFromToken(cToken);
+                        Debug.Log($"[UDPManager] Nested Hvac Compression Highlights -> {state}");
+                        EventManager.RequestToggleCompressionHighlights?.Invoke(state);
+                        return true;
+                    }
+                }
+
+                foreach (var key in arrowKeys)
+                {
+                    if (hvacObj.TryGetValue(key, StringComparison.OrdinalIgnoreCase, out JToken aToken))
+                    {
+                        bool state = ExtractBooleanFromToken(aToken);
+                        Debug.Log($"[UDPManager] Nested Hvac Arrows -> {state}");
+                        EventManager.RequestToggleArrows?.Invoke(state);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static bool TryExtractFaultCode(JObject obj, out int faultCode)
+        {
+            faultCode = -1;
+            string[] keys = { "fault_code", "fault", "FaultIndex", "faultIndex", "code", "faultNumber", "fault_id" };
+            foreach (var key in keys)
+            {
+                if (obj.TryGetValue(key, StringComparison.OrdinalIgnoreCase, out JToken token))
+                {
+                    if (token.Type == JTokenType.Integer || token.Type == JTokenType.Float)
+                    {
+                        faultCode = token.Value<int>();
+                        return true;
+                    }
+                    if (token.Type == JTokenType.String && int.TryParse(token.Value<string>(), out int parsed))
+                    {
+                        faultCode = parsed;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private static bool ExtractBooleanFromToken(JToken token)
+        {
+            if (token == null) return false;
+            if (token.Type == JTokenType.Boolean) return token.Value<bool>();
+            if (token.Type == JTokenType.Integer || token.Type == JTokenType.Float) return token.Value<int>() > 0;
+            if (bool.TryParse(token.ToString(), out bool b)) return b;
+            if (int.TryParse(token.ToString(), out int i)) return i > 0;
+            return false;
+        }
+
+        private void DecodeNonJsonPacket(string message)
+        {
+            string trimmed = message.Trim();
+
+            // 1. Raw integer fault code: e.g. "101", "102"
+            if (int.TryParse(trimmed, out int rawCode))
+            {
+                if (rawCode >= 100 && rawCode < 1000)
+                {
+                    Debug.Log($"[UDPManager] Detected Raw Fault Code -> {rawCode}");
+                    EventManager.RequestTriggerFault?.Invoke(rawCode);
+                    return;
+                }
+            }
+
+            // 2. Simple text command: "reset", "compression_on", "compression_off", etc.
+            string lower = trimmed.ToLowerInvariant();
+            if (lower == "reset" || lower == "reset_fault")
+            {
+                Debug.Log("[UDPManager] Detected Raw Reset Command");
+                EventManager.RequestResetFault?.Invoke();
+                var resetAck = new FaultResetPayload();
+                SendString(JsonConvert.SerializeObject(resetAck, Formatting.None));
+                return;
+            }
+            if (lower == "compression_on" || lower == "highlights_on" || lower == "compression_1")
+            {
+                Debug.Log("[UDPManager] Detected Raw Compression Highlights On Command");
+                EventManager.RequestToggleCompressionHighlights?.Invoke(true);
+                return;
+            }
+            if (lower == "compression_off" || lower == "highlights_off" || lower == "compression_0")
+            {
+                Debug.Log("[UDPManager] Detected Raw Compression Highlights Off Command");
+                EventManager.RequestToggleCompressionHighlights?.Invoke(false);
+                return;
+            }
+            if (lower == "arrows_on" || lower == "arrows_1")
+            {
+                Debug.Log("[UDPManager] Detected Raw Arrows On Command");
+                EventManager.RequestToggleArrows?.Invoke(true);
+                return;
+            }
+            if (lower == "arrows_off" || lower == "arrows_0")
+            {
+                Debug.Log("[UDPManager] Detected Raw Arrows Off Command");
+                EventManager.RequestToggleArrows?.Invoke(false);
+                return;
+            }
+            /*
+            if (lower == "skip" || lower == "skip_step")
+            {
+                Debug.Log("[UDPManager] Detected Raw Skip Command");
+                EventManager.RequestSkipStep?.Invoke();
+                return;
+            }
+            if (lower == "back" || lower == "back_step" || lower == "previous_step" || lower == "previous" || lower == "reverse_step")
+            {
+                Debug.Log("[UDPManager] Detected Raw Back Step Command");
+                EventManager.RequestPreviousStep?.Invoke();
+                return;
+            }
+            */
+
+            // 3. Fallback: CSV Sliders Packet
+            DecodeCsvPacket(trimmed);
         }
 
         private void DecodeCsvPacket(string message)

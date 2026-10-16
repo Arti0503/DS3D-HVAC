@@ -68,6 +68,10 @@
       {
         "Name": "Application Quit",
         "Value": false
+      },
+      {
+        "Name": "Compression_Highlights",
+        "Value": true
       }
     ]
   }

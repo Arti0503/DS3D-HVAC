@@ -16,11 +16,14 @@ namespace CCEPL_CAD
         Faults _faults;
 
         private int StepPerform = -1;
+        private int _currentFaultIndex = -1;
+        public int CurrentFaultIndex => _currentFaultIndex;
         private int maxAttempt = 3;
         private List<FaultTab> _faultTabs = new();
         private List<FaultStep> _faultSteps = new();
         private List<Tool> _tools = new();
         [SerializeField] private List<int> _stepsAttempt;
+        [SerializeField] private List<int> _wrongAttemptsPerStep = new();
         
         private bool leftOpen = false;
         private bool rightOpen = false;
@@ -35,17 +38,28 @@ namespace CCEPL_CAD
         private bool splashFinished = false;
         internal ToolObject _selectedTool;
 
-        IEnumerator Start()
+        private bool _positionsInitialized = false;
+
+        private void EnsurePanelPositions()
         {
-            yield return null;
-            
+            if (_positionsInitialized) return;
+            if (_uiRef == null || _uiRef.ToolPanel == null || _uiRef.FaultPanel == null) return;
+
             toolsPanelOpenPos = _uiRef.ToolPanel.anchoredPosition;
             modesPanelOpenPos = _uiRef.FaultPanel.anchoredPosition;
             toolsPanelClosedPos = toolsPanelOpenPos + Vector2.left * (_uiRef.ToolPanel.rect.width + 50);
             modesPanelClosedPos = modesPanelOpenPos + Vector2.right * (_uiRef.FaultPanel.rect.width + 50);
-            
+            _positionsInitialized = true;
+        }
+
+        IEnumerator Start()
+        {
+            yield return null;
+            EnsurePanelPositions();
             _uiRef.ToolPanel.anchoredPosition = toolsPanelClosedPos;
             _uiRef.FaultPanel.anchoredPosition = modesPanelClosedPos;
+            leftOpen = false;
+            rightOpen = false;
         }
 
         private void OnEnable()
@@ -58,18 +72,27 @@ namespace CCEPL_CAD
 
             _uiRef.RepairedFaultSubmitBtn.onClick.AddListener(SubmitRepairedFault);
 
-            _uiRef.SkipFaultStepBtn.onClick.AddListener(() => SkipCurrentStep(true));
-            _uiRef.BackStepBtn.onClick.AddListener(PreviousStep);
-            _uiRef.FaultResetBtn.onClick.AddListener(()=>
+            // [REMOVED FROM UI] Skip, BackStep, and UI Reset buttons disabled/commented out
+            // if (_uiRef.SkipFaultStepBtn != null) _uiRef.SkipFaultStepBtn.onClick.AddListener(() => SkipCurrentStep(true));
+            // if (_uiRef.BackStepBtn != null) _uiRef.BackStepBtn.onClick.AddListener(PreviousStep);
+            // if (_uiRef.FaultResetBtn != null) _uiRef.FaultResetBtn.onClick.AddListener(() => ResetUI());
+
+            // Remove control buttons from exam mode toggle list so toggling modes never re-shows them
+            if (_uiRef.HiddenObjectForExamMode != null)
             {
-                ResetUI();
-            });
+                _uiRef.HiddenObjectForExamMode.RemoveAll(x => x == null || 
+                    (_uiRef.SkipFaultStepBtn != null && x == _uiRef.SkipFaultStepBtn.gameObject) || 
+                    (_uiRef.BackStepBtn != null && x == _uiRef.BackStepBtn.gameObject) || 
+                    (_uiRef.FaultResetBtn != null && x == _uiRef.FaultResetBtn.gameObject));
+            }
+
             _uiRef.TestModeToggle.onValueChanged.AddListener((state) =>
             {
                 _uiRef.TestModeToggleText.color = state ? Color.red : Color.black;
                 _uiRef.ModeBGImage.sprite = state ? _uiRef.TestModeBGSprite : _uiRef.ExamModeBGSprite;
                 _uiRef.HiddenObjectForExamMode.ForEach(x => x.SetActive(state));
                 LayoutRebuilder.ForceRebuildLayoutImmediate(_uiRef.ModeBGImage.rectTransform);
+                HideRemovedControlButtons();
             });
             _uiRef.ExamModeToggle.onValueChanged.AddListener((state) =>
                 _uiRef.ExamModeToggleText.color = state ? Color.red : Color.black);
@@ -87,11 +110,22 @@ namespace CCEPL_CAD
             EventManager.OnWrongToolSelected += WrongToolSelected;
             EventManager.OnLogMessage += OnLogMessage;
             EventManager.TriggerDisplayText += DisaplayStepMessage;
+            EventManager.RequestTriggerFault += TriggerFaultFromNetwork;
+            EventManager.RequestResetFault += ResetUI;
+            // EventManager.RequestSkipStep += HandleSkipRequest;
+            // EventManager.RequestPreviousStep += PreviousStep;
 
-            _uiRef.SkipFaultStepBtn.gameObject.SetActive(RefManager.Instance.FaultManager.Modes == Modes.Easy);
-            _uiRef.BackStepBtn.gameObject.SetActive(RefManager.Instance.FaultManager.Modes == Modes.Easy);
+            HideRemovedControlButtons();
 
             Init();
+        }
+
+        private void HideRemovedControlButtons()
+        {
+            if (_uiRef == null) return;
+            if (_uiRef.SkipFaultStepBtn != null) _uiRef.SkipFaultStepBtn.gameObject.SetActive(false);
+            if (_uiRef.BackStepBtn != null) _uiRef.BackStepBtn.gameObject.SetActive(false);
+            if (_uiRef.FaultResetBtn != null) _uiRef.FaultResetBtn.gameObject.SetActive(false);
         }
 
         void OnLogMessage(string text, bool isError)
@@ -108,9 +142,9 @@ namespace CCEPL_CAD
             _uiRef.ModesBtn.onClick.RemoveAllListeners();
             _uiRef.ModesBackBtn.onClick.RemoveAllListeners();
             _uiRef.RepairedFaultSubmitBtn.onClick.RemoveAllListeners();
-            _uiRef.SkipFaultStepBtn.onClick.RemoveAllListeners();
-            _uiRef.BackStepBtn.onClick.RemoveAllListeners();
-            _uiRef.FaultResetBtn.onClick.RemoveAllListeners();
+            // if (_uiRef.SkipFaultStepBtn != null) _uiRef.SkipFaultStepBtn.onClick.RemoveAllListeners();
+            // if (_uiRef.BackStepBtn != null) _uiRef.BackStepBtn.onClick.RemoveAllListeners();
+            // if (_uiRef.FaultResetBtn != null) _uiRef.FaultResetBtn.onClick.RemoveAllListeners();
             _uiRef.VideoPlayer.loopPointReached -= VideoPlayeManager;
             EventManager.OnToolSelected -= ToolSelect;
             EventManager.OnFaultDetect -= FaultDetect;
@@ -119,24 +153,154 @@ namespace CCEPL_CAD
             EventManager.OnWrongToolSelected -= WrongToolSelected;
             EventManager.OnLogMessage -= OnLogMessage;
             EventManager.TriggerDisplayText -= DisaplayStepMessage;
+            EventManager.RequestTriggerFault -= TriggerFaultFromNetwork;
+            EventManager.RequestResetFault -= ResetUI;
+            // EventManager.RequestSkipStep -= HandleSkipRequest;
+            // EventManager.RequestPreviousStep -= PreviousStep;
         }
 
-        private void ToggleToolsUI()
+        /*
+        private void HandleSkipRequest()
         {
-            leftOpen = !leftOpen;
-            var seq = DOTween.Sequence();
-            seq.Append(_uiRef.ToolPanel.DOAnchorPos(leftOpen ? toolsPanelOpenPos : toolsPanelClosedPos, 0.5f));
-            seq.Join(_uiRef.ToolPanel.DOScale(leftOpen ? 1f : 0.95f, 0.5f));
-            seq.SetEase(Ease.OutBack);
+            SkipCurrentStep(true);
+        }
+        */
+
+        public void SetToolsUI(bool open, bool animate = true)
+        {
+            EnsurePanelPositions();
+            if (leftOpen == open) return;
+            leftOpen = open;
+            if (animate && _uiRef != null && _uiRef.ToolPanel != null)
+            {
+                var seq = DOTween.Sequence();
+                seq.Append(_uiRef.ToolPanel.DOAnchorPos(leftOpen ? toolsPanelOpenPos : toolsPanelClosedPos, 0.45f));
+                seq.Join(_uiRef.ToolPanel.DOScale(leftOpen ? 1f : 0.95f, 0.45f));
+                seq.SetEase(Ease.OutBack);
+            }
+            else if (_uiRef != null && _uiRef.ToolPanel != null)
+            {
+                _uiRef.ToolPanel.anchoredPosition = leftOpen ? toolsPanelOpenPos : toolsPanelClosedPos;
+                _uiRef.ToolPanel.localScale = leftOpen ? Vector3.one : new Vector3(0.95f, 0.95f, 1f);
+            }
         }
 
-        void ToggleModesUI()
+        public void SetModesUI(bool open, bool animate = true)
         {
-            rightOpen = !rightOpen;
-            var seq = DOTween.Sequence();
-            seq.Append(_uiRef.FaultPanel.DOAnchorPos(rightOpen ? modesPanelOpenPos : modesPanelClosedPos, 0.5f));
-            seq.Join(_uiRef.FaultPanel.DOScale(rightOpen ? 1f : 0.95f, 0.5f));
-            seq.SetEase(Ease.OutBack);
+            EnsurePanelPositions();
+            if (rightOpen == open) return;
+            rightOpen = open;
+            if (animate && _uiRef != null && _uiRef.FaultPanel != null)
+            {
+                var seq = DOTween.Sequence();
+                seq.Append(_uiRef.FaultPanel.DOAnchorPos(rightOpen ? modesPanelOpenPos : modesPanelClosedPos, 0.45f));
+                seq.Join(_uiRef.FaultPanel.DOScale(rightOpen ? 1f : 0.95f, 0.45f));
+                seq.SetEase(Ease.OutBack);
+            }
+            else if (_uiRef != null && _uiRef.FaultPanel != null)
+            {
+                _uiRef.FaultPanel.anchoredPosition = rightOpen ? modesPanelOpenPos : modesPanelClosedPos;
+                _uiRef.FaultPanel.localScale = rightOpen ? Vector3.one : new Vector3(0.95f, 0.95f, 1f);
+            }
+        }
+
+        private void ToggleToolsUI() => SetToolsUI(!leftOpen);
+        void ToggleModesUI() => SetModesUI(!rightOpen);
+
+        private void ScrollToFaultTab(FaultTab targetTab)
+        {
+            if (targetTab == null || _uiRef == null || _uiRef.FaultTabParent == null) return;
+
+            var scrollRect = _uiRef.FaultTabParent.GetComponentInParent<ScrollRect>();
+            if (scrollRect == null || scrollRect.content == null || scrollRect.viewport == null) return;
+
+            DOVirtual.DelayedCall(0.05f, () =>
+            {
+                if (targetTab == null || scrollRect == null || scrollRect.content == null || scrollRect.viewport == null) return;
+
+                Canvas.ForceUpdateCanvases();
+                LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.content);
+
+                RectTransform targetRect = targetTab.GetComponent<RectTransform>();
+                if (targetRect == null) return;
+
+                float contentWidth = scrollRect.content.rect.width;
+                float viewportWidth = scrollRect.viewport.rect.width;
+                if (contentWidth <= viewportWidth) return;
+
+                Vector3 localPos = scrollRect.content.InverseTransformPoint(targetRect.position);
+                float childCenterX = localPos.x - scrollRect.content.rect.xMin;
+                float halfView = viewportWidth * 0.5f;
+                float targetScroll = Mathf.Clamp(childCenterX - halfView, 0f, contentWidth - viewportWidth);
+                float normalized = Mathf.Clamp01(targetScroll / (contentWidth - viewportWidth));
+
+                DOTween.To(() => scrollRect.horizontalNormalizedPosition, x => scrollRect.horizontalNormalizedPosition = x, normalized, 0.4f)
+                    .SetEase(Ease.OutCubic);
+            });
+        }
+
+        private void ScrollToTool(Tool targetTool)
+        {
+            if (targetTool == null || _uiRef == null || _uiRef.ToolParent == null) return;
+
+            var scrollRect = _uiRef.ToolParent.GetComponentInParent<ScrollRect>();
+            if (scrollRect == null || scrollRect.content == null || scrollRect.viewport == null) return;
+
+            DOVirtual.DelayedCall(0.05f, () =>
+            {
+                if (targetTool == null || scrollRect == null || scrollRect.content == null || scrollRect.viewport == null) return;
+
+                Canvas.ForceUpdateCanvases();
+                LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.content);
+
+                RectTransform targetRect = targetTool.GetComponent<RectTransform>();
+                if (targetRect == null) return;
+
+                float contentHeight = scrollRect.content.rect.height;
+                float viewportHeight = scrollRect.viewport.rect.height;
+                if (contentHeight <= viewportHeight) return;
+
+                Vector3 localPos = scrollRect.content.InverseTransformPoint(targetRect.position);
+                float childDistFromTop = Mathf.Abs(localPos.y);
+                float halfView = viewportHeight * 0.5f;
+                float targetScroll = Mathf.Clamp(childDistFromTop - halfView, 0f, contentHeight - viewportHeight);
+                float normalized = 1f - Mathf.Clamp01(targetScroll / (contentHeight - viewportHeight));
+
+                DOTween.To(() => scrollRect.verticalNormalizedPosition, x => scrollRect.verticalNormalizedPosition = x, normalized, 0.4f)
+                    .SetEase(Ease.OutCubic);
+            });
+        }
+
+        private void ScrollToStep(FaultStep targetStep)
+        {
+            if (targetStep == null || _uiRef == null || _uiRef.FaultStepParent == null) return;
+
+            var scrollRect = _uiRef.FaultStepParent.GetComponentInParent<ScrollRect>();
+            if (scrollRect == null || scrollRect.content == null || scrollRect.viewport == null) return;
+
+            DOVirtual.DelayedCall(0.05f, () =>
+            {
+                if (targetStep == null || scrollRect == null || scrollRect.content == null || scrollRect.viewport == null) return;
+
+                Canvas.ForceUpdateCanvases();
+                LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.content);
+
+                RectTransform targetRect = targetStep.GetComponent<RectTransform>();
+                if (targetRect == null) return;
+
+                float contentHeight = scrollRect.content.rect.height;
+                float viewportHeight = scrollRect.viewport.rect.height;
+                if (contentHeight <= viewportHeight) return;
+
+                Vector3 localPos = scrollRect.content.InverseTransformPoint(targetRect.position);
+                float childDistFromTop = Mathf.Abs(localPos.y);
+                float halfView = viewportHeight * 0.5f;
+                float targetScroll = Mathf.Clamp(childDistFromTop - halfView, 0f, contentHeight - viewportHeight);
+                float normalized = 1f - Mathf.Clamp01(targetScroll / (contentHeight - viewportHeight));
+
+                DOTween.To(() => scrollRect.verticalNormalizedPosition, x => scrollRect.verticalNormalizedPosition = x, normalized, 0.4f)
+                    .SetEase(Ease.OutCubic);
+            });
         }
 
         void ToolSelect(ToolType toolType, ToolObject toolObject)
@@ -152,9 +316,16 @@ namespace CCEPL_CAD
             if(!RefManager.Instance.FaultManager.IsFaultStart) return;
             _tools.ForEach(x => x.ResetSelection());
             _faultSteps[StepPerform].OnStepComplete();
+
+            int stepNumber = StepPerform + 1;
+            int wrongAttempts = (StepPerform < _wrongAttemptsPerStep.Count) ? _wrongAttemptsPerStep[StepPerform] : 0;
+            int totalSteps = _faultSteps.Count;
+            bool isLastStep = (StepPerform + 1 >= _faultSteps.Count);
+
             StepPerform++;
-            _stepsAttempt[^ 1]++;
-            //Debug.Log($"{StepPerform} steps complete");
+
+            EventManager.OnStepAccomplished?.Invoke(_currentFaultIndex, stepNumber, wrongAttempts, totalSteps, isLastStep);
+
             CheckAllStepAreCompleted();
         }
 
@@ -169,23 +340,30 @@ namespace CCEPL_CAD
             if (StepPerform >= _faultSteps.Count)
             {
                 _uiRef.RepairedFaultSubmitBtn.interactable = true;
-                _uiRef.SkipFaultStepBtn.interactable = false;
-                _uiRef.BackStepBtn.interactable = false;
-                _uiRef.FaultResetBtn.interactable = false;
+                if (_uiRef.SkipFaultStepBtn != null) _uiRef.SkipFaultStepBtn.interactable = false;
+                if (_uiRef.BackStepBtn != null) _uiRef.BackStepBtn.interactable = false;
+                if (_uiRef.FaultResetBtn != null) _uiRef.FaultResetBtn.interactable = false;
                 EventManager.OnLogMessage?.Invoke("Fault Repaired Successfully", false);
-                Debug.LogError($"Attempts {JsonConvert.SerializeObject(_stepsAttempt.ToArray())}");
+                Debug.LogError($"Attempts {JsonConvert.SerializeObject(_wrongAttemptsPerStep.ToArray())}");
+
+                EventManager.OnFaultFinished?.Invoke(_currentFaultIndex, _faultSteps.Count, new List<int>(_wrongAttemptsPerStep));
             }
             else
             {
                 var step = _faultSteps[StepPerform];
-                _uiRef.SkipFaultStepBtn.interactable = step.IsSkippable();
-                _uiRef.BackStepBtn.interactable = StepPerform > 0;
+                if (_uiRef.SkipFaultStepBtn != null) _uiRef.SkipFaultStepBtn.interactable = step.IsSkippable();
+                if (_uiRef.BackStepBtn != null) _uiRef.BackStepBtn.interactable = StepPerform > 0;
                 step.OnStepStart();
+                ScrollToStep(step);
                 
                 _tool = _tools.Find(x => x._toolType == step.Step.RequireToolType);
-                if(step.IsSkippable()) _tool.HighLightTool();
-                _stepsAttempt.Add(0);
+                if(step.IsSkippable() && _tool != null)
+                {
+                    _tool.HighLightTool();
+                    ScrollToTool(_tool);
+                }
             }
+            HideRemovedControlButtons();
         }
 
         internal FaultStep GetCurrentFaultStep()
@@ -204,9 +382,10 @@ namespace CCEPL_CAD
             _uiRef.RepairedFaultSubmitBtn.interactable = false;
             _uiRef.RepairedFaultSubmitBtn.transform.parent.gameObject.SetActive(false);
             _uiRef.RepairedFaultSubmitBtn.interactable = false;
-            _uiRef.SkipFaultStepBtn.interactable = true;
-            _uiRef.BackStepBtn.interactable = false;
-            _uiRef.FaultResetBtn.interactable = true;
+            if (_uiRef.SkipFaultStepBtn != null) _uiRef.SkipFaultStepBtn.interactable = true;
+            if (_uiRef.BackStepBtn != null) _uiRef.BackStepBtn.interactable = false;
+            if (_uiRef.FaultResetBtn != null) _uiRef.FaultResetBtn.interactable = true;
+            HideRemovedControlButtons();
 
             //Testmode is default
             _uiRef.TestModeToggle.SetIsOnWithoutNotify(true);
@@ -239,6 +418,38 @@ namespace CCEPL_CAD
             }
         }
 
+        public void TriggerFaultFromNetwork(int faultCode)
+        {
+            EnsureFaultsLoaded();
+            if (_faults == null || _faults.FaultList == null)
+            {
+                Debug.LogError($"[UIManager] Cannot trigger fault {faultCode}: Fault list is not loaded yet.");
+                return;
+            }
+
+            var faultData = _faults.FaultList.Find(x => x.FaultIndex == faultCode);
+            if (faultData == null)
+            {
+                Debug.LogWarning($"[UIManager] Fault code {faultCode} not found in FaultList.");
+                return;
+            }
+
+            if (RefManager.Instance.FaultManager.IsFaultStart)
+            {
+                ResetUI();
+            }
+
+            OnFaultClick(faultCode);
+        }
+
+        private void EnsureFaultsLoaded()
+        {
+            if (_faults == null && RefManager.Instance != null && RefManager.Instance.FaultManager != null)
+            {
+                _faults = RefManager.Instance.FaultManager.faults;
+            }
+        }
+
         void OnFaultClick(int faultIndex)
         {
             if(RefManager.Instance.FaultManager.IsFaultStart)
@@ -246,11 +457,26 @@ namespace CCEPL_CAD
                 EventManager.OnLogMessage?.Invoke("Please finish the selected fault first.", true);
                 return;
             }
-            RefManager.Instance.FaultManager.IsFaultStart = true;
+            EnsureFaultsLoaded();
+            if (_faults == null || _faults.FaultList == null) return;
+
             var faultData = _faults.FaultList.Find(x => x.FaultIndex == faultIndex);
             if (faultData == null) return;
+
+            // Automatically open both Tool Panel (left) and Fault/Modes Panel (right)
+            SetToolsUI(true);
+            SetModesUI(true);
+
+            _currentFaultIndex = faultIndex;
+            RefManager.Instance.FaultManager.IsFaultStart = true;
             _faultTabs.ForEach(x => x.ResetGraphics());
-            _faultTabs.Find(x => x._faultIndex == faultIndex).SelectTab();
+            var matchingTab = _faultTabs.Find(x => x._faultIndex == faultIndex);
+            if (matchingTab != null)
+            {
+                matchingTab.SelectTab();
+                ScrollToFaultTab(matchingTab);
+            }
+
             _uiRef.FaultDescription.text = faultData.Message;
             foreach (var fault in faultData.Steps)
             {
@@ -262,24 +488,49 @@ namespace CCEPL_CAD
             var step = _faultSteps[0];
             _uiRef.MessageObj.gameObject.SetActive(false);
             step.OnStepStart();
+            ScrollToStep(step);
             StepPerform = 0;
-            _stepsAttempt = new List<int> { 0 };
+            _wrongAttemptsPerStep = new List<int>();
+            _stepsAttempt = new List<int>();
+            for (int i = 0; i < _faultSteps.Count; i++)
+            {
+                _wrongAttemptsPerStep.Add(0);
+                _stepsAttempt.Add(0);
+            }
             
             _uiRef.RepairedFaultSubmitBtn.transform.parent.gameObject.SetActive(true);
             _uiRef.RepairedFaultSubmitBtn.interactable = false;
-            _uiRef.SkipFaultStepBtn.interactable = true;
-            _uiRef.FaultResetBtn.interactable = true;
-            _uiRef.BackStepBtn.interactable = false;
+            if (_uiRef.SkipFaultStepBtn != null) _uiRef.SkipFaultStepBtn.interactable = true;
+            if (_uiRef.FaultResetBtn != null) _uiRef.FaultResetBtn.interactable = true;
+            if (_uiRef.BackStepBtn != null) _uiRef.BackStepBtn.interactable = false;
+            HideRemovedControlButtons();
 
             _tool = _tools.Find(x => x._toolType == step.Step.RequireToolType);
-            if(step.IsSkippable()) _tool.HighLightTool();
+            if(step.IsSkippable() && _tool != null)
+            {
+                _tool.HighLightTool();
+                ScrollToTool(_tool);
+            }
+
+            EventManager.OnFaultStarted?.Invoke(faultIndex, _faultSteps.Count);
         }
 
         void WrongToolSelected()
         {
             EventManager.OnLogMessage?.Invoke("Wrong tool selected. Please select a right tool.", true);
-            if (_stepsAttempt.Count > 0) _stepsAttempt[^ 1]++;
-            if (_stepsAttempt[^ 1] >= maxAttempt) SkipCurrentStep();
+            if (StepPerform >= 0 && StepPerform < _wrongAttemptsPerStep.Count)
+            {
+                _wrongAttemptsPerStep[StepPerform]++;
+                if (StepPerform < _stepsAttempt.Count)
+                {
+                    _stepsAttempt[StepPerform] = _wrongAttemptsPerStep[StepPerform];
+                }
+
+                if (_wrongAttemptsPerStep[StepPerform] >= maxAttempt)
+                {
+                    SkipCurrentStep();
+                }
+            }
         }
 
         void SkipCurrentStep(bool isSkipped = false)
@@ -289,14 +540,16 @@ namespace CCEPL_CAD
             _tools.ForEach(x => x.ResetSelection(true));
 
             // Lock button during animation to prevent duplicate triggers
-            _uiRef.SkipFaultStepBtn.interactable = false;
-            _uiRef.BackStepBtn.interactable = false;
+            if (_uiRef.SkipFaultStepBtn != null) _uiRef.SkipFaultStepBtn.interactable = false;
+            if (_uiRef.BackStepBtn != null) _uiRef.BackStepBtn.interactable = false;
+
+            int stepNumber = StepPerform + 1;
+            int totalSteps = _faultSteps.Count;
+            bool isLastStep = (StepPerform + 1 >= _faultSteps.Count);
+            int wrongAttempts = isSkipped ? 0 : ((StepPerform < _wrongAttemptsPerStep.Count) ? _wrongAttemptsPerStep[StepPerform] : maxAttempt);
 
             if (isSkipped)
             {
-                if (_stepsAttempt.Count > 0)
-                    _stepsAttempt[^1] = 0;
-                
                 _faultSteps[StepPerform].OnStepSkip();
                 if (_selectedTool)
                 {
@@ -305,7 +558,10 @@ namespace CCEPL_CAD
                     _selectedTool = null;
                 }
             }
-            else _faultSteps[StepPerform].OnStepReject();
+            else
+            {
+                _faultSteps[StepPerform].OnStepReject();
+            }
 
             var currentStep = _faultSteps[StepPerform];
             var animDuration = currentStep.Step.AnimationClip ? currentStep.Step.AnimationClip.length + 2f : 2f;
@@ -316,17 +572,19 @@ namespace CCEPL_CAD
             {
                 _faultAnimation = null;
                 StepPerform++;
+                EventManager.OnStepAccomplished?.Invoke(_currentFaultIndex, stepNumber, wrongAttempts, totalSteps, isLastStep);
                 CheckAllStepAreCompleted();
             });
         }
 
+        /*
         void PreviousStep()
         {
             if (StepPerform <= 0 || StepPerform > _faultSteps.Count) return;
 
             // Lock UI buttons during back-step animation to prevent duplicate calls
-            _uiRef.SkipFaultStepBtn.interactable = false;
-            _uiRef.BackStepBtn.interactable = false;
+            if (_uiRef.SkipFaultStepBtn != null) _uiRef.SkipFaultStepBtn.interactable = false;
+            if (_uiRef.BackStepBtn != null) _uiRef.BackStepBtn.interactable = false;
 
             _tools.ForEach(x => x.ResetSelection(true));
 
@@ -337,22 +595,26 @@ namespace CCEPL_CAD
                 _selectedTool = null;
             }
 
-            // Reset visual state of current step if within bounds
+            // Reset visual state of forward step being backed out of
             if (StepPerform < _faultSteps.Count)
             {
-                _faultSteps[StepPerform].OnStepReject();
+                _faultSteps[StepPerform].OnStepReset();
             }
 
             // Step back to previous step index
             StepPerform--;
 
-            if (_stepsAttempt != null && _stepsAttempt.Count > 1)
-            {
-                _stepsAttempt.RemoveAt(_stepsAttempt.Count - 1);
-            }
-
             var targetStep = _faultSteps[StepPerform];
             targetStep.OnStepReject();
+
+            // Give the code of the last step completed to LabVIEW:
+            int lastCompletedStep = StepPerform;
+            int wrongAttemptsOnLastCompleted = (lastCompletedStep > 0 && lastCompletedStep - 1 < _wrongAttemptsPerStep.Count)
+                ? _wrongAttemptsPerStep[lastCompletedStep - 1]
+                : 0;
+            int totalSteps = _faultSteps.Count;
+
+            EventManager.OnStepAccomplished?.Invoke(_currentFaultIndex, lastCompletedStep, wrongAttemptsOnLastCompleted, totalSteps, false);
 
             if (targetStep.Step != null && targetStep.Step.AnimationClip != null)
             {
@@ -376,6 +638,7 @@ namespace CCEPL_CAD
                 CheckAllStepAreCompleted();
             }
         }
+        */
 
         void SubmitRepairedFault()
         {
@@ -391,6 +654,9 @@ namespace CCEPL_CAD
                 _faultAnimation = null;
             }
             RefManager.Instance.FaultManager.IsFaultStart = false;
+            _currentFaultIndex = -1;
+            _wrongAttemptsPerStep?.Clear();
+            _stepsAttempt?.Clear();
             _uiRef.RepairedFaultSubmitBtn.transform.parent.gameObject.SetActive(false);
             
             if (_selectedTool)
@@ -400,9 +666,10 @@ namespace CCEPL_CAD
                 HandleToolOperation.Instance._tool = null;
             }
             _uiRef.RepairedFaultSubmitBtn.interactable = false;
-            _uiRef.SkipFaultStepBtn.interactable = true;
-            _uiRef.FaultResetBtn.interactable = true;
-            _uiRef.BackStepBtn.interactable = false;
+            if (_uiRef.SkipFaultStepBtn != null) _uiRef.SkipFaultStepBtn.interactable = true;
+            if (_uiRef.FaultResetBtn != null) _uiRef.FaultResetBtn.interactable = true;
+            if (_uiRef.BackStepBtn != null) _uiRef.BackStepBtn.interactable = false;
+            HideRemovedControlButtons();
             
             _uiRef.FaultDisplayObj.gameObject.SetActive(false);
             _faultSteps.ForEach(b =>
@@ -414,6 +681,8 @@ namespace CCEPL_CAD
             _faultTabs.ForEach(x => x.ResetGraphics());
             _uiRef.FaultDescription.text = string.Empty;
             _tools.ForEach(x => x.ResetSelection(true));
+            SetToolsUI(false);
+            SetModesUI(false);
             EventManager.OnFaultCompleted?.Invoke();
         }
 

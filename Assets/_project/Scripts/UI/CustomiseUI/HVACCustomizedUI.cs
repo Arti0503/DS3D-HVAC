@@ -21,11 +21,121 @@ namespace CCEPL_CAD
         public RectTransform container;
         public RectTransform amplitudeContainer;
         public ObjectVisibilityManager ObjectVisibilityManager;
+
+        [Header("Highlights & Idle Visual Controls")]
+        public GameObject CompresserHighLightParent;
+        public List<GameObject> CompressionHighlightObjects = new List<GameObject>();
+        public List<GameObject> ArrowObjects = new List<GameObject>();
+        public bool AreCompressionHighlightsActive = true;
+        public bool AreArrowsActive = true;
         
         private Coroutine globalDebounceCoroutine;
         private List<SpeedSliderData> speedSliderInstances = new List<SpeedSliderData>();
         private List<ColorSliderData> colorSliderInstances = new List<ColorSliderData>();
         private List<BlendShapeChangeData> blendShapeChangeInstances = new List<BlendShapeChangeData>();
+
+        protected override void Awake()
+        {
+            base.Awake();
+            InitializeVisualReferences();
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            EventManager.RequestToggleCompressionHighlights += SetCompressionHighlightsVisible;
+            EventManager.RequestToggleArrows += SetArrowsVisible;
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            EventManager.RequestToggleCompressionHighlights -= SetCompressionHighlightsVisible;
+            EventManager.RequestToggleArrows -= SetArrowsVisible;
+        }
+
+        private void InitializeVisualReferences()
+        {
+            if (CompresserHighLightParent == null)
+            {
+                var t = transform.Find("HVAC_Main/CompresserHighLight");
+                if (t == null)
+                {
+                    var allT = GetComponentsInChildren<Transform>(true);
+                    foreach (var child in allT)
+                    {
+                        if (child.name.IndexOf("Compress", StringComparison.OrdinalIgnoreCase) >= 0 &&
+                            child.name.IndexOf("HighLight", StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            CompresserHighLightParent = child.gameObject;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    CompresserHighLightParent = t.gameObject;
+                }
+            }
+
+            CompressionHighlightObjects.Clear();
+            ArrowObjects.Clear();
+
+            if (CompresserHighLightParent != null)
+            {
+                for (int i = 0; i < CompresserHighLightParent.transform.childCount; i++)
+                {
+                    var child = CompresserHighLightParent.transform.GetChild(i).gameObject;
+                    if (!CompressionHighlightObjects.Contains(child))
+                    {
+                        CompressionHighlightObjects.Add(child);
+                    }
+                }
+            }
+
+            foreach (var idleObj in IdleObjects)
+            {
+                if (idleObj == null) continue;
+                if (idleObj.name.IndexOf("Compress", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    if (!CompressionHighlightObjects.Contains(idleObj))
+                    {
+                        CompressionHighlightObjects.Add(idleObj);
+                    }
+                }
+                else
+                {
+                    if (!ArrowObjects.Contains(idleObj))
+                    {
+                        ArrowObjects.Add(idleObj);
+                    }
+                }
+            }
+        }
+
+        public void SetCompressionHighlightsVisible(bool isVisible)
+        {
+            AreCompressionHighlightsActive = isVisible;
+            if (CompresserHighLightParent != null)
+            {
+                CompresserHighLightParent.SetActive(isVisible);
+            }
+            foreach (var obj in CompressionHighlightObjects)
+            {
+                if (obj != null) obj.SetActive(isVisible);
+            }
+            EventManager.OnCompressionHighlightsChanged?.Invoke(isVisible);
+        }
+
+        public void SetArrowsVisible(bool isVisible)
+        {
+            AreArrowsActive = isVisible;
+            foreach (var obj in ArrowObjects)
+            {
+                if (obj != null) obj.SetActive(isVisible);
+            }
+            EventManager.OnArrowsChanged?.Invoke(isVisible);
+        }
 
         protected override void Start()
         {
@@ -42,11 +152,25 @@ namespace CCEPL_CAD
             ObjectVisibilityManager.objectsVisible = false;
             ObjectVisibilityManager.ToggleVisibility();
             
-            //reset blendshap
+            //reset blendshape
             foreach (var bsd in blendShapeChangeInstances)
             {
                 bsd.TargetMesh.SetBlendShapeWeight(bsd.BlendShapeIndexs[0], 0);
             }
+
+            AreCompressionHighlightsActive = false;
+            AreArrowsActive = false;
+            EventManager.OnCompressionHighlightsChanged?.Invoke(false);
+            EventManager.OnArrowsChanged?.Invoke(false);
+        }
+
+        public override void OnFaultCompleted()
+        {
+            base.OnFaultCompleted();
+            AreCompressionHighlightsActive = true;
+            AreArrowsActive = true;
+            EventManager.OnCompressionHighlightsChanged?.Invoke(true);
+            EventManager.OnArrowsChanged?.Invoke(true);
         }
 
         public override void ResetAnimation()
@@ -225,6 +349,11 @@ namespace CCEPL_CAD
 #else
                             Application.Quit();
 #endif
+                        break;
+
+                    case 2:
+                        var compVisible = value > 0;
+                        SetCompressionHighlightsVisible(compVisible);
                         break;
                 }
             }

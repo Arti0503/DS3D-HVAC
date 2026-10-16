@@ -26,5 +26,18 @@ namespace CCEPL_CAD
         
         public static Action<string, bool> OnLogMessage;
         public static Action<string> TriggerDisplayText;
+
+        // LabVIEW Telemetry & Remote Control
+        public static Action<int, int, int, int, bool> OnStepAccomplished; // (faultCode, stepNumber, wrongAttempts, totalSteps, isFaultCompleted)
+        public static Action<int, int, List<int>> OnFaultFinished; // (faultCode, totalSteps, wrongAttemptsPerStep)
+        public static Action<int, int> OnFaultStarted; // (faultCode, totalSteps)
+        public static Action<int> RequestTriggerFault; // (faultCode)
+        public static Action RequestResetFault;
+        public static Action<bool> RequestToggleCompressionHighlights; // (bool isVisible)
+        public static Action<bool> RequestToggleArrows; // (bool isVisible)
+        public static Action<bool> OnCompressionHighlightsChanged; // (bool isVisible)
+        public static Action<bool> OnArrowsChanged; // (bool isVisible)
+        // public static Action RequestSkipStep;
+        // public static Action RequestPreviousStep;
     }
 }

@@ -480,7 +480,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &34286548
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2120,6 +2120,8 @@ MonoBehaviour:
   _listenPort: 9000
   _remotePort: 5005
   _autoUpdateRemoteIPFromSender: 1
+  _stepSendFormat: 0
+  _sendFaultStartedAck: 1
 --- !u!4 &399080772
 Transform:
   m_ObjectHideFlags: 0
@@ -9994,6 +9996,11 @@ MonoBehaviour:
   container: {fileID: 1704620538}
   amplitudeContainer: {fileID: 1079083845}
   ObjectVisibilityManager: {fileID: 751822915}
+  CompresserHighLightParent: {fileID: 0}
+  CompressionHighlightObjects: []
+  ArrowObjects: []
+  AreCompressionHighlightsActive: 1
+  AreArrowsActive: 1
 --- !u!1 &754707909
 GameObject:
   m_ObjectHideFlags: 0
@@ -10317,7 +10324,7 @@ GameObject:
   - component: {fileID: 813309671}
   - component: {fileID: 813309672}
   m_Layer: 0
-  m_Name: Circle4
+  m_Name: Compression4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12174,6 +12181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   _stepsAttempt: 05000000010000000300000002000000
+  _wrongAttemptsPerStep: 
 --- !u!4 &1235398806
 Transform:
   m_ObjectHideFlags: 0
@@ -12631,7 +12639,7 @@ GameObject:
   - component: {fileID: 1354786167}
   - component: {fileID: 1354786168}
   m_Layer: 0
-  m_Name: Circle3
+  m_Name: Compression3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12730,7 +12738,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1374092225
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13213,9 +13221,9 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_Spacing: 7
-  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
@@ -13733,7 +13741,7 @@ GameObject:
   - component: {fileID: 1515278301}
   - component: {fileID: 1515278302}
   m_Layer: 0
-  m_Name: Circle2
+  m_Name: Compression2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13832,7 +13840,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1541661656
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14039,7 +14047,7 @@ GameObject:
   - component: {fileID: 1589263207}
   - component: {fileID: 1589263208}
   m_Layer: 0
-  m_Name: Circle1
+  m_Name: Compression1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

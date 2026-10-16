@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DS3D-HVAC Simulator — LabVIEW Developer Interface & Telemetry Specification</title>
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 16mm 18mm 16mm;
+    @bottom-right {
+      content: counter(page);
+    }
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.55;
+    font-size: 10pt;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+
+  .header {
+    border-bottom: 3px solid #0284c7;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+  }
+
+  .header-tag {
+    display: inline-block;
+    background: #0284c7;
+    color: #ffffff;
+    font-size: 7.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: 18pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.3px;
+  }
+
+  .subtitle {
+    font-size: 10.5pt;
+    color: #475569;
+    margin: 0;
+  }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin: 16px 0 24px 0;
+  }
+
+  .meta-item {
+    font-size: 8.5pt;
+  }
+
+  .meta-label {
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 7pt;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .meta-value {
+    color: #0f172a;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: 12.5pt;
+    color: #0f172a;
+    border-left: 4px solid #0284c7;
+    padding-left: 8px;
+    margin-top: 26px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    page-break-after: avoid;
+  }
+
+  h3 {
+    font-size: 10.5pt;
+    color: #1e293b;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    font-weight: 700;
+    page-break-after: avoid;
+  }
+
+  p {
+    margin: 0 0 8px 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 16px 0;
+    font-size: 8.5pt;
+  }
+
+  th {
+    background-color: #0f172a;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+    padding: 7px 10px;
+    border: 1px solid #0f172a;
+  }
+
+  td {
+    padding: 6px 10px;
+    border: 1px solid #e2e8f0;
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td {
+    background-color: #f8fafc;
+  }
+
+  .code-block {
+    background: #0f172a;
+    color: #f1f5f9;
+    border-radius: 5px;
+    padding: 10px 12px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 8pt;
+    margin: 8px 0 12px 0;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    border: 1px solid #1e293b;
+    page-break-inside: avoid;
+  }
+
+  .code-inline {
+    background: #f1f5f9;
+    color: #0369a1;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-family: "Consolas", monospace;
+    font-size: 8.5pt;
+    font-weight: 600;
+  }
+
+  .callout {
+    background: #f0fdf4;
+    border-left: 4px solid #16a34a;
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin: 12px 0;
+    font-size: 8.5pt;
+    page-break-inside: avoid;
+  }
+
+  .callout-title {
+    font-weight: 700;
+    color: #15803d;
+    margin-bottom: 4px;
+  }
+
+  .callout-warning {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+  }
+
+  .callout-warning .callout-title {
+    color: #b45309;
+  }
+
+  .callout-info {
+    background: #f0f9ff;
+    border-left: 4px solid #0284c7;
+  }
+
+  .callout-info .callout-title {
+    color: #0369a1;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 7.5pt;
+    font-weight: 700;
+  }
+
+  .badge-port {
+    background: #e0e7ff;
+    color: #3730a3;
+  }
+
+  .badge-json {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  .badge-udp {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-tag">Official Engineering Interface Contract</div>
+  <h1>DS3D-HVAC Simulator &mdash; LabVIEW Integration Guide</h1>
+  <div class="subtitle">UDP Telemetry Specification, JSON Formats, Error 56 Mitigation, and Master Excel Mappings</div>
+</div>
+
+<div class="meta-grid">
+  <div class="meta-item">
+    <div class="meta-label">Protocol</div>
+    <div class="meta-value">UDP / JSON &amp; CSV</div>
+  </div>
+  <div class="meta-item">
+    <div class="meta-label">Commands Port (Inbound)</div>
+    <div class="meta-value">Port 9000 &rarr; Unity</div>
+  </div>
+  <div class="meta-item">
+    <div class="meta-label">Telemetry Port (Outbound)</div>
+    <div class="meta-value">Port 5005 &rarr; LabVIEW</div>
+  </div>
+  <div class="meta-item">
+    <div class="meta-label">Target Simulator</div>
+    <div class="meta-value">DS3D-HVAC Phase 1</div>
+  </div>
+</div>
+
+<h2>1. System Architecture &amp; Network Topology</h2>
+<p>The DS3D-HVAC simulation platform operates as a distributed system pairing the <strong>LabVIEW Simulation / Instructor Station</strong> with the <strong>Unity 3D Engine (DS3D)</strong> via lightweight, non-blocking UDP network packets.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 22%;">Channel</th>
+      <th style="width: 14%;">Direction</th>
+      <th style="width: 16%;">Port &amp; Host</th>
+      <th style="width: 16%;">Format</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Commands &amp; Triggers</strong></td>
+      <td>LabVIEW &rarr; Unity</td>
+      <td><span class="badge badge-port">9000</span> (127.0.0.1)</td>
+      <td><span class="badge badge-json">JSON</span> / Text</td>
+      <td>Fault trigger scenarios (101&ndash;114 active, 115&ndash;116 reserved), workflow resets, step skipping, and instructor overrides.</td>
+    </tr>
+    <tr>
+      <td><strong>Continuous Sliders</strong></td>
+      <td>LabVIEW &rarr; Unity</td>
+      <td><span class="badge badge-port">9000</span> (127.0.0.1)</td>
+      <td><span class="badge badge-json">JSON</span> / CSV</td>
+      <td>16 continuous physical parameters: airflow velocity, condenser/evaporator fan speeds, damper blendshapes.</td>
+    </tr>
+    <tr>
+      <td><strong>Scoring Telemetry</strong></td>
+      <td>Unity &rarr; LabVIEW</td>
+      <td><span class="badge badge-port">5005</span> (127.0.0.1)</td>
+      <td><span class="badge badge-json">JSON</span> / Integer</td>
+      <td>Event-driven step completions, trainee wrong tool clicks (mistakes counter), and fault completion reports.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout callout-info">
+  <div class="callout-title">Adaptive Remote Endpoint Synchronization</div>
+  Unity's <code>UDPManager</code> has <code>autoUpdateRemoteIPFromSender = true</code> enabled. When LabVIEW transmits any command to Port 9000, Unity automatically locks onto LabVIEW's IP address and returns all telemetry to Port 5005 on that exact sender IP.
+</div>
+
+<div class="callout callout-warning">
+  <div class="callout-title">Architecture Clarification: Direct UDP Sockets vs. Excel File Flow</div>
+  <p style="margin: 0 0 4px 0;"><strong>Runtime Communication:</strong> Real-time control and telemetry between LabVIEW and Unity are executed directly over <strong>UDP network sockets</strong> (<span class="badge badge-port">9000</span> / <span class="badge badge-port">5005</span>) with sub-millisecond latency.</p>
+  <p style="margin: 0;"><strong>Excel's Role:</strong> The Master Excel workbook is the <strong>Interface Control Document (ICD) &amp; Test Reporting Template</strong>. Live polling of an <code>.xlsx</code> file during runtime is avoided in production because Windows applies exclusive write locks (<code>SharingViolationException</code>) when a file is open in Excel/LabVIEW, and disk decompression creates unwanted lag. LabVIEW sends live commands directly to Unity over UDP, and logs final results to Excel.</p>
+</div>
+
+<h2>2. Inbound Commands (LabVIEW &rarr; Unity, Port 9000)</h2>
+<p>LabVIEW transmits commands to Port 9000. Payloads are formatted as lightweight JSON.</p>
+
+<h3>2.1 Trigger Procedural Fault Scenario</h3>
+<p>Instructs Unity to launch a 3D fault scenario. When received, Unity:</p>
+<ul style="margin: 4px 0 8px 18px; padding: 0; font-size: 8.5pt;">
+  <li>Smoothly slides open both the <strong>Tool Panel</strong> (left) and <strong>Fault Menu</strong> (right).</li>
+  <li>Auto-scrolls the horizontal fault menu directly to the selected fault tab.</li>
+  <li>Focuses the 3D camera onto the target equipment.</li>
+  <li>Auto-scrolls the tool rack to the required tool for Step 1 and highlights it.</li>
+  <li>Dispatches an immediate <code>fault_started</code> telemetry packet back to LabVIEW.</li>
+</ul>
+
+<div class="code-block">// 1. Standard Explicit JSON Command (Recommended)
+{
+  "command": "trigger_fault",
+  "fault_code": 101
+}
+
+// 2. Shorthand JSON Format
+{
+  "fault": 101
+}</div>
+
+<h3>2.2 Reset Simulator (JSON Prompt Only)</h3>
+<p>Aborts any active fault workflow, returns 3D tools to storage, slides UI panels closed, and restores default camera view. <em>Note: The Reset button has been removed from the trainee UI; reset is triggered remotely via this JSON command.</em></p>
+<div class="code-block">{
+  "command": "reset"
+}</div>
+
+<h3>2.3 Compression Highlights &amp; Idle Arrow Visibility Control</h3>
+<p>In idle state, HVAC refrigerant circulation arrows and compression highlights (<code>CompresserHighLight</code>) are active. When any fault triggers, they turn off automatically. LabVIEW can also explicitly toggle them on or off at any time:</p>
+<div class="code-block">// 1. Explicit JSON Command Format
+{
+  "command": "set_compression_highlights",
+  "state": true  // true = Show Highlights, false = Hide Highlights
+}
+
+// 2. Direct Shorthand Property Format
+{
+  "compression_highlights": true
+}
+
+// 3. Arrow Visibility Control Command
+{
+  "command": "set_arrows",
+  "state": true  // true = Show Arrows, false = Hide Arrows
+}</div>
+
+<div class="callout callout-info">
+  <div class="callout-title">Trainee UI Simplification &amp; Procedural Integrity</div>
+  To enforce strict procedural training, the <strong>Skip</strong>, <strong>Back Step</strong>, and <strong>Reset</strong> buttons have been removed from the trainee interface. The <strong>Submit</strong> button is centered at the bottom of the remedial steps panel. Remote step-skipping and back-stepping have also been disabled so trainees must complete each procedural step in sequence.
+</div>
+
+<div class="page-break"></div>
+
+<h3>2.4 Continuous Speed &amp; Animation Sliders</h3>
+<p>LabVIEW transmits simulation speed variables, color intensity lerps, and damper positions to Port 9000.</p>
+<div class="code-block">{
+  "Hvac": {
+    "Speed": [
+      { "Name": "BlueArrowOut",   "Value": 5.0 },
+      { "Name": "Fan1",           "Value": 5.0 },
+      { "Name": "Fan2",           "Value": 5.0 },
+      { "Name": "GreenArrowIN1",  "Value": 5.0 },
+      { "Name": "GreenArrowIN2",  "Value": 5.0 },
+      { "Name": "YellowArrowIn",  "Value": 5.0 }
+    ],
+    "Amplitude": [
+      { "Name": "RedArrow_Inlet",    "Value": 0.0 },
+      { "Name": "RedArrow_Outlet",   "Value": 0.0 },
+      { "Name": "BlueArrow_Outlet",  "Value": 0.0 },
+      { "Name": "GreenArrow_Inlet",  "Value": 0.0 },
+      { "Name": "YellowArrow_Inlet", "Value": 0.0 },
+      { "Name": "FADL",              "Value": 0.0 },
+      { "Name": "FADR",              "Value": 0.0 },
+      { "Name": "RAD",               "Value": 0.0 }
+    ],
+    "Boolean": [
+      { "Name": "ShowHideObjects",        "Value": false },
+      { "Name": "Quit",                   "Value": false },
+      { "Name": "Compression_Highlights", "Value": true }
+    ]
+  }
+}</div>
+
+<h2>3. Outbound Telemetry (Unity &rarr; LabVIEW, Port 5005)</h2>
+<p>Unity transmits real-time execution feedback and training scoring over UDP port 5005 as UTF-8 encoded JSON objects.</p>
+
+<h3>3.1 Event: <code>fault_started</code></h3>
+<p>Dispatched immediately when a scenario starts. Confirms total steps, turns off idle highlights/arrows, and initializes LabVIEW counters.</p>
+<div class="code-block">{
+  "event": "fault_started",
+  "fault_code": 101,
+  "total_steps": 14,
+  "status": "started",
+  "compression_highlights": false,
+  "arrows_active": false
+}</div>
+
+<h3>3.2 Event: <code>step_completed</code></h3>
+<p>Dispatched whenever a step is completed by the trainee OR auto-demonstrated after 3 mistakes. LabVIEW reads this to track progress and score mistakes.</p>
+<div class="code-block">{
+  "event": "step_completed",
+  "fault_code": 101,
+  "step_number": 1,
+  "wrong_attempts": 2,
+  "total_steps": 14,
+  "status": "success",
+  "is_fault_completed": false,
+  "compression_highlights": false,
+  "arrows_active": false
+}</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 25%;">JSON Key</th>
+      <th style="width: 18%;">LabVIEW Type</th>
+      <th>Field Semantics &amp; Scoring Logic</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="code-inline">event</span></td>
+      <td>String</td>
+      <td>Always <code>"step_completed"</code>. Used to route in LabVIEW Case Structure.</td>
+    </tr>
+    <tr>
+      <td><span class="code-inline">fault_code</span></td>
+      <td>Numeric (I32)</td>
+      <td>Active fault scenario identifier (e.g. <code>101</code>).</td>
+    </tr>
+    <tr>
+      <td><span class="code-inline">step_number</span></td>
+      <td>Numeric (I32)</td>
+      <td>1-based index of the step that was just accomplished (<code>1, 2, 3...</code>).</td>
+    </tr>
+    <tr>
+      <td><span class="code-inline">wrong_attempts</span></td>
+      <td>Numeric (I32)</td>
+      <td><strong>Trainee mistakes:</strong> Count of wrong tool clicks prior to success. If <code>wrong_attempts &gt;= 3</code>, indicates the 3-mistake limit triggered auto-demonstration.</td>
+    </tr>
+    <tr>
+      <td><span class="code-inline">total_steps</span></td>
+      <td>Numeric (I32)</td>
+      <td>Total steps required for this procedure.</td>
+    </tr>
+    <tr>
+      <td><span class="code-inline">is_fault_completed</span></td>
+      <td>Boolean</td>
+      <td><code>true</code> if this was the final step; <code>false</code> if additional steps remain.</td>
+    </tr>
+    <tr>
+      <td><span class="code-inline">compression_highlights</span></td>
+      <td>Boolean</td>
+      <td><code>true</code> if highlights are visible; <code>false</code> if deactivated during fault.</td>
+    </tr>
+    <tr>
+      <td><span class="code-inline">arrows_active</span></td>
+      <td>Boolean</td>
+      <td><code>true</code> if arrows are visible; <code>false</code> if deactivated during fault.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>3.3 Event: <code>fault_completed</code></h3>
+<p>Dispatched upon completing the final step of a procedure. Restores idle compression highlights and arrows, and contains full mistake audit.</p>
+<div class="code-block">{
+  "event": "fault_completed",
+  "fault_code": 101,
+  "status": "success",
+  "total_steps": 14,
+  "wrong_attempts_per_step": [0, 2, 1, 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+  "is_fault_completed": true,
+  "compression_highlights": true,
+  "arrows_active": true
+}</div>
+
+<h3>3.4 Events: <code>compression_highlights_changed</code> &amp; <code>arrows_changed</code></h3>
+<p>Dispatched whenever an instructor command toggles highlights or arrows explicitly:</p>
+<div class="code-block">{
+  "event": "compression_highlights_changed",
+  "compression_highlights": true,
+  "status": "enabled"
+}
+
+{
+  "event": "arrows_changed",
+  "arrows_active": true,
+  "status": "enabled"
+}</div>
+
+<h3>3.5 Event: <code>fault_reset</code></h3>
+<p>Dispatched when the instructor sends a reset command, confirming return to idle state:</p>
+<div class="code-block">{
+  "event": "fault_reset",
+  "status": "idle",
+  "compression_highlights": true,
+  "arrows_active": true
+}</div>
+
+<div class="page-break"></div>
+
+<h2>4. LabVIEW Error 56 Mitigation (UDP Read Timeout)</h2>
+
+<div class="callout callout-warning">
+  <div class="callout-title">Understanding LabVIEW Error 56</div>
+  LabVIEW <strong>Error 56</strong> is a standard socket timeout. It occurs when <code>UDP Read.vi</code> waits for incoming packets longer than its configured timeout (default: 25,000 ms). Because fault telemetry is <em>event-driven</em> (packets are only sent when a user clicks a tool or finishes a step), timeouts are normal while the trainee inspects the 3D model.
+</div>
+
+<h3>Recommended LabVIEW Architecture:</h3>
+<ol style="margin: 6px 0 12px 18px; padding: 0; font-size: 8.5pt;">
+  <li><strong>Set Timeout Low:</strong> Configure <code>UDP Read.vi</code> timeout to <strong>100 ms &ndash; 200 ms</strong>.</li>
+  <li><strong>Case Structure Error Filter:</strong> Wire the error cluster from <code>UDP Read.vi</code> to a Case Structure:
+    <ul style="margin: 4px 0; padding-left: 16px;">
+      <li><strong>Error Case:</strong> Use <code>Unbundle by Name</code> to check <code>code == 56</code>.
+        <ul style="margin: 2px 0; padding-left: 14px;">
+          <li>If <code>code == 56</code>: Call <code>Clear Error.vi</code>. <em>Do not halt execution.</em></li>
+          <li>If <code>code != 56</code>: Propagate genuine network faults (e.g. socket closure).</li>
+        </ul>
+      </li>
+      <li><strong>No Error Case:</strong> Pass the incoming byte array into <code>JSON to Cluster.vi</code>.</li>
+    </ul>
+  </li>
+  <li><strong>Sample-and-Hold Shift Register:</strong> Store the previous valid telemetry cluster in a While Loop shift register. When Error 56 occurs, output the retained values so UI indicators never flicker or reset to zero.</li>
+</ol>
+
+<h2>5. Fault Catalog Reference (Scenarios 101 &ndash; 114 Active + 115 &ndash; 116 Reserved)</h2>
+
+<div class="callout callout-info">
+  <div class="callout-title">Architecture Clarification: 14 Active 3D Workflows in Unity vs. 16 Slots in Master Excel</div>
+  <p style="margin-bottom: 5px;"><strong>Why Unity UI shows 14 faults (101&ndash;114):</strong> The Unity DS3D simulator contains exactly <strong>14 fully authored interactive 3D fault scenarios</strong> (Faults 101 through 114). The Unity interface dynamically builds its tab list directly from <code>FaultManager.faults.FaultList</code> (14 items), ensuring only scenarios with complete 3D models, tool targets, animations, and camera tracks appear to the trainee.</p>
+  <p style="margin: 0;"><strong>Why the Master Excel &amp; Documentation mention 116:</strong> In the railway specification team's original master Excel workbook (sheet <code>fault List</code> and sheet <code>DATA TRANSFER</code> rows 828&ndash;843), 16 slot addresses (101&ndash;116) were allocated. <strong>Faults 115 and 116 are Reserved / Spare Placeholders</strong> reserved for future subsystem additions. They have no 3D animation assets authored in Unity at this stage.</p>
+</div>
+
+<p>Fault workflows implemented in Unity DS3D alongside reserved Excel allocation slots:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 10%;">Code</th>
+      <th style="width: 25%;">Subsystem</th>
+      <th style="width: 35%;">Fault Title / Scope</th>
+      <th style="width: 8%; text-align: center;">Steps</th>
+      <th>JSON Command Payload</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>101</strong></td>
+      <td>Refrigeration Circuit</td>
+      <td>No HVAC operations</td>
+      <td style="text-align: center;">14</td>
+      <td><code>{"command":"trigger_fault","fault_code":101}</code></td>
+    </tr>
+    <tr>
+      <td><strong>102</strong></td>
+      <td>Blower &amp; Ventilation</td>
+      <td>No ventilation</td>
+      <td style="text-align: center;">22</td>
+      <td><code>{"command":"trigger_fault","fault_code":102}</code></td>
+    </tr>
+    <tr>
+      <td><strong>103</strong></td>
+      <td>Ventilation Circuit</td>
+      <td>Reduced ventilation</td>
+      <td style="text-align: center;">15</td>
+      <td><code>{"command":"trigger_fault","fault_code":103}</code></td>
+    </tr>
+    <tr>
+      <td><strong>104</strong></td>
+      <td>Compressor / Pressure</td>
+      <td>Suction low &amp; discharge low (Circuit 1)</td>
+      <td style="text-align: center;">15</td>
+      <td><code>{"command":"trigger_fault","fault_code":104}</code></td>
+    </tr>
+    <tr>
+      <td><strong>105</strong></td>
+      <td>Expansion / Pressure</td>
+      <td>Suction low &amp; discharge low (Circuit 2)</td>
+      <td style="text-align: center;">14</td>
+      <td><code>{"command":"trigger_fault","fault_code":105}</code></td>
+    </tr>
+    <tr>
+      <td><strong>106</strong></td>
+      <td>Differential Pressure</td>
+      <td>High suction and high discharge</td>
+      <td style="text-align: center;">26</td>
+      <td><code>{"command":"trigger_fault","fault_code":106}</code></td>
+    </tr>
+    <tr>
+      <td><strong>107</strong></td>
+      <td>Compressor Unit</td>
+      <td>Compressor not operating</td>
+      <td style="text-align: center;">40</td>
+      <td><code>{"command":"trigger_fault","fault_code":107}</code></td>
+    </tr>
+    <tr>
+      <td><strong>108</strong></td>
+      <td>Cooling Capacity</td>
+      <td>Reduced cooling</td>
+      <td style="text-align: center;">33</td>
+      <td><code>{"command":"trigger_fault","fault_code":108}</code></td>
+    </tr>
+    <tr>
+      <td><strong>109</strong></td>
+      <td>Heating Subsystem</td>
+      <td>No Heating</td>
+      <td style="text-align: center;">15</td>
+      <td><code>{"command":"trigger_fault","fault_code":109}</code></td>
+    </tr>
+    <tr>
+      <td><strong>110</strong></td>
+      <td>Thermal Regulation</td>
+      <td>Over Cooling</td>
+      <td style="text-align: center;">8</td>
+      <td><code>{"command":"trigger_fault","fault_code":110}</code></td>
+    </tr>
+    <tr>
+      <td><strong>111</strong></td>
+      <td>Thermal Regulation</td>
+      <td>Over Heating</td>
+      <td style="text-align: center;">7</td>
+      <td><code>{"command":"trigger_fault","fault_code":111}</code></td>
+    </tr>
+    <tr>
+      <td><strong>112</strong></td>
+      <td>Emergency Systems</td>
+      <td>No emergency ventilation</td>
+      <td style="text-align: center;">14</td>
+      <td><code>{"command":"trigger_fault","fault_code":112}</code></td>
+    </tr>
+    <tr>
+      <td><strong>113</strong></td>
+      <td>Safety &amp; Sensors</td>
+      <td>Smoke identified in saloon</td>
+      <td style="text-align: center;">13</td>
+      <td><code>{"command":"trigger_fault","fault_code":113}</code></td>
+    </tr>
+    <tr>
+      <td><strong>114</strong></td>
+      <td>Mechanical Diagnostics</td>
+      <td>Compressor noisy | Condenser Fan / Blower</td>
+      <td style="text-align: center;">36</td>
+      <td><code>{"command":"trigger_fault","fault_code":114}</code></td>
+    </tr>
+    <tr style="background-color: #f1f5f9; color: #64748b;">
+      <td><strong>115</strong></td>
+      <td>Auxiliary / Expansion</td>
+      <td><em>[Reserved / Spare in Master Excel]</em></td>
+      <td style="text-align: center;">&mdash;</td>
+      <td><em>Reserved Excel slot (No 3D asset authored in Unity)</em></td>
+    </tr>
+    <tr style="background-color: #f1f5f9; color: #64748b;">
+      <td><strong>116</strong></td>
+      <td>Auxiliary / Expansion</td>
+      <td><em>[Reserved / Spare in Master Excel]</em></td>
+      <td style="text-align: center;">&mdash;</td>
+      <td><em>Reserved Excel slot (No 3D asset authored in Unity)</em></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<h2>6. Master Excel Workbook Cell Mappings</h2>
+<p>Workbook: <strong><code>J886_Software_HVAC_phase1-V1_Fault_Management_Updated.xlsx</code></strong></p>
+
+<h3>6.1 Sheet <code>DATA TRANSFER</code> &mdash; Inbound Telemetry (Unity &rarr; LabVIEW, Rows 821&ndash;854)</h3>
+<table>
+  <thead>
+    <tr>
+      <th style="width: 10%;">Row</th>
+      <th style="width: 25%;">Variable Name</th>
+      <th style="width: 15%;">Data Type</th>
+      <th style="width: 12%;">Cell Ref</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>821</strong></td><td><code>Active_Fault_Code</code></td><td>Integer</td><td><code>F821</code></td><td>Currently active scenario code (101&ndash;114 active, 115&ndash;116 reserved).</td></tr>
+    <tr><td><strong>822</strong></td><td><code>Current_Step_Number</code></td><td>Integer</td><td><code>F822</code></td><td>1-based index of the currently active/accomplished step (0 = unstarted/reset).</td></tr>
+    <tr><td><strong>823</strong></td><td><code>Total_Steps</code></td><td>Integer</td><td><code>F823</code></td><td>Total steps required for active scenario.</td></tr>
+    <tr><td><strong>824</strong></td><td><code>Wrong_Attempts</code></td><td>Integer</td><td><code>F824</code></td><td>Mistakes counter: cumulative wrong tool clicks on this step.</td></tr>
+    <tr><td><strong>825</strong></td><td><code>Step_Accomplished</code></td><td>Boolean</td><td><code>F825</code></td><td>Status pulse: <code>1</code> when step finishes successfully.</td></tr>
+    <tr><td><strong>826</strong></td><td><code>Fault_Completed</code></td><td>Boolean</td><td><code>F826</code></td><td>Status flag: <code>1</code> when full fault procedure is finished.</td></tr>
+    <tr><td><strong>827&ndash;840</strong></td><td><code>Fault_101_Status</code> &hellip; <code>114</code></td><td>Boolean</td><td><code>F827:F840</code></td><td>Active scenario flags for Unity 3D Faults 101 through 114 (14 continuous rows).</td></tr>
+    <tr><td><strong>841&ndash;842</strong></td><td><code>Fault_115_Status</code> &amp; <code>116</code></td><td>Boolean</td><td><code>F841:F842</code></td><td><em>Reserved / Spare slots</em> allocated in master Excel for future expansion.</td></tr>
+    <tr><td><strong>843</strong></td><td><code>Compression_Highlights_Active</code></td><td>Boolean</td><td><code>F843</code></td><td>Compression highlights visibility (<code>0</code> = Inactive during fault, <code>1</code> = Active in idle).</td></tr>
+    <tr><td><strong>844</strong></td><td><code>Arrows_Active</code></td><td>Boolean</td><td><code>F844</code></td><td>Refrigerant arrow circulation visibility (<code>0</code> = Inactive during fault, <code>1</code> = Active in idle).</td></tr>
+    <tr><td><strong>845&ndash;853</strong></td><td><code>Spare</code> (9 rows)</td><td>Boolean</td><td><code>F845:F853</code></td><td>Spare Boolean slots grouped contiguously with active Booleans.</td></tr>
+    <tr><td><strong>854</strong></td><td><code>Telemetry_Event</code></td><td>String</td><td><code>F854</code></td><td>Last event: <code>"fault_started"</code>, <code>"step_completed"</code>, <code>"fault_completed"</code>, <code>"fault_reset"</code>.</td></tr>
+  </tbody>
+</table>
+
+<h3>6.2 Sheet <code>DATA TRANSFER</code> &mdash; Outbound Commands (LabVIEW &rarr; Unity, Rows 835&ndash;840)</h3>
+<table>
+  <thead>
+    <tr>
+      <th style="width: 10%;">Row</th>
+      <th style="width: 25%;">Variable Name</th>
+      <th style="width: 15%;">Data Type</th>
+      <th style="width: 20%;">Formula / Link</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>835</strong></td><td><code>DS3D_OFF</code></td><td>Integer</td><td>Direct Value</td><td>Application shutdown signal (<code>0</code>=Running, <code>1</code>=Quit).</td></tr>
+    <tr><td><strong>836</strong></td><td><code>Fault_Code_Trigger</code></td><td>Integer</td><td><code>='DATA TRANSFER'!F1209</code></td><td>Dispatches selected Fault Code (101&ndash;114 active) to Unity.</td></tr>
+    <tr><td><strong>837</strong></td><td><code>Fault_Cause_Trigger</code></td><td>Integer</td><td><code>='DATA TRANSFER'!F1210</code></td><td>Dispatches Cause Number (10101&ndash;11401 active) to Unity.</td></tr>
+    <tr><td><strong>838</strong></td><td><code>Fault_Command_Action</code></td><td>Integer</td><td><code>='DATA TRANSFER'!F1211</code></td><td>Action: <code>0</code>=Idle, <code>1</code>=Trigger Fault, <code>2</code>=Reset Fault.</td></tr>
+    <tr><td><strong>839</strong></td><td><code>ShowHideObjects</code></td><td>Boolean</td><td>Direct Value</td><td>Toggle component visibility in 3D scene (<code>0</code>=Hide, <code>1</code>=Show).</td></tr>
+    <tr><td><strong>840</strong></td><td><code>Compression_Highlights</code></td><td>Boolean</td><td><code>='DATA TRANSFER'!F1212</code></td><td>Explicitly toggle compression highlights (<code>0</code>=Hide, <code>1</code>=Show).</td></tr>
+  </tbody>
+</table>
+
+<h3>6.3 Sheet <code>DATA TRANSFER</code> &mdash; Instructor Control Cells (Rows 1209&ndash;1212)</h3>
+<table>
+  <thead>
+    <tr>
+      <th style="width: 10%;">Row</th>
+      <th style="width: 25%;">Variable Name</th>
+      <th style="width: 15%;">Data Type</th>
+      <th style="width: 12%;">Cell Ref</th>
+      <th>Instructor Station UI Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>1209</strong></td><td><code>Fault_Number</code></td><td>Integer</td><td><code>F1209</code></td><td>Instructor sets desired fault scenario (101&ndash;114 active).</td></tr>
+    <tr><td><strong>1210</strong></td><td><code>Cause_Number</code></td><td>Integer</td><td><code>F1210</code></td><td>Instructor sets specific cause code (10101&ndash;11401 active).</td></tr>
+    <tr><td><strong>1211</strong></td><td><code>Fault_Command_Action</code></td><td>Integer</td><td><code>F1211</code></td><td>Command: <code>1</code> to Trigger Fault, <code>2</code> to Reset Fault.</td></tr>
+    <tr><td><strong>1212</strong></td><td><code>Compression_Highlights</code></td><td>Boolean</td><td><code>F1212</code></td><td>Toggle Compression Highlights Visibility (<code>0</code>=Hide, <code>1</code>=Show).</td></tr>
+  </tbody>
+</table>
+
+<h2>7. Verification &amp; Testing Utilities</h2>
+<p>To verify the entire integration without opening LabVIEW, use the bundled Python test bridge:</p>
+<ul style="margin: 6px 0 12px 18px; padding: 0; font-size: 8.5pt;">
+  <li><strong>Double-Click Launcher:</strong> <code>Run_Fault_Test_Bridge.bat</code> in the <code>DS3D-HVAC</code> project root.</li>
+  <li><strong>CLI Execution:</strong> <code>python hvac_fault_test_bridge.py</code></li>
+  <li><strong>Features:</strong> Binds to Port 5005, dispatches commands to Port 9000, displays live color-coded telemetry of steps and mistakes, and writes live values directly back into the master Excel file.</li>
+</ul>
+
+<div style="margin-top: 30px; padding-top: 10px; border-top: 1px solid #cbd5e1; font-size: 7.5pt; color: #94a3b8; text-align: center;">
+  DS3D-HVAC Simulation Platform &bull; Railway &amp; Metro Vehicle Simulator &bull; Internal Technical Documentation
+</div>
+
+</body>
+</html>

@@ -57,6 +57,12 @@ namespace CCEPL_CAD
             ResetAllTargets();
         }
 
+        internal void OnStepReset()
+        {
+            ApplyStateVisuals(DefaultColor, Color.clear);
+            ResetAllTargets();
+        }
+
         internal bool IsToolMatch(ToolType tool, string code)
         {
             return _requireTool == tool;

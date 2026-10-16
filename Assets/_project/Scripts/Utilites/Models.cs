@@ -12,6 +12,84 @@ namespace CCEPL_CAD.Models
     }
 
     [Serializable]
+    public class StepProgressPayload
+    {
+        public string @event = "step_completed";
+        public int fault_code;
+        public int step_number;
+        public int wrong_attempts;
+        public int total_steps;
+        public string status = "success";
+        public bool is_fault_completed;
+        public bool compression_highlights;
+        public bool arrows_active;
+    }
+
+    [Serializable]
+    public class FaultCompletedPayload
+    {
+        public string @event = "fault_completed";
+        public int fault_code;
+        public string status = "success";
+        public int total_steps;
+        public List<int> wrong_attempts_per_step;
+        public bool is_fault_completed = true;
+        public bool compression_highlights = true;
+        public bool arrows_active = true;
+    }
+
+    [Serializable]
+    public class FaultStartedPayload
+    {
+        public string @event = "fault_started";
+        public int fault_code;
+        public int total_steps;
+        public string status = "started";
+        public bool compression_highlights = false;
+        public bool arrows_active = false;
+    }
+
+    [Serializable]
+    public class FaultResetPayload
+    {
+        public string @event = "fault_reset";
+        public string status = "idle";
+        public bool compression_highlights = true;
+        public bool arrows_active = true;
+    }
+
+    [Serializable]
+    public class CompressionHighlightsPayload
+    {
+        public string @event = "compression_highlights_changed";
+        public bool compression_highlights;
+        public string status;
+    }
+
+    [Serializable]
+    public class ArrowsPayload
+    {
+        public string @event = "arrows_changed";
+        public bool arrows_active;
+        public string status;
+    }
+
+    [Serializable]
+    public class TelemetryErrorPayload
+    {
+        public string @event = "error";
+        public string message;
+        public string status = "error";
+    }
+
+    public enum StepSendFormat
+    {
+        JSON,
+        RawNumber,
+        Both
+    }
+
+    [Serializable]
     public class Fault
     {
         public int FaultIndex;
