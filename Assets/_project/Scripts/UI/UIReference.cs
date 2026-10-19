@@ -64,6 +64,12 @@ namespace CCEPL_CAD
         [Space(5), Header("Other UI References")]
         public TMP_Text FaultDescription;
 
+        [Space(5), Header("Mistake Counter References")]
+        public TMP_Text MistakeCounterText;
+        public GameObject MistakeCounterBadge;
+        public TMP_Text HudMistakeCounterText;
+        public GameObject HudMistakeCounterBadge;
+
         [Space(5), Header("Video Panel References")]
         public RectTransform VideoPanel;
         public VideoPlayer VideoPlayer;

@@ -11,8 +11,17 @@ namespace CCEPL_CAD
 {
     public class UIManager : MonoBehaviour
     {
-        RefManager _refManager => RefManager.Instance;
-        UIReference _uiRef;
+        private RefManager _refManager => RefManager.Instance != null ? RefManager.Instance : GameObject.FindObjectOfType<RefManager>();
+        private UIReference _uiReference;
+        private UIReference _uiRef
+        {
+            get
+            {
+                if (_uiReference == null && _refManager != null) _uiReference = _refManager.UIReference;
+                return _uiReference;
+            }
+            set => _uiReference = value;
+        }
         Faults _faults;
 
         private int StepPerform = -1;
@@ -24,6 +33,8 @@ namespace CCEPL_CAD
         private List<Tool> _tools = new();
         [SerializeField] private List<int> _stepsAttempt;
         [SerializeField] private List<int> _wrongAttemptsPerStep = new();
+        [SerializeField] private int _faultMistakes = 0;
+        public int FaultMistakes => _faultMistakes;
         
         private bool leftOpen = false;
         private bool rightOpen = false;
@@ -112,7 +123,7 @@ namespace CCEPL_CAD
             EventManager.TriggerDisplayText += DisaplayStepMessage;
             EventManager.RequestTriggerFault += TriggerFaultFromNetwork;
             EventManager.RequestResetFault += ResetUI;
-            // EventManager.RequestSkipStep += HandleSkipRequest;
+            EventManager.RequestSkipStep += HandleSkipRequest;
             // EventManager.RequestPreviousStep += PreviousStep;
 
             HideRemovedControlButtons();
@@ -155,16 +166,26 @@ namespace CCEPL_CAD
             EventManager.TriggerDisplayText -= DisaplayStepMessage;
             EventManager.RequestTriggerFault -= TriggerFaultFromNetwork;
             EventManager.RequestResetFault -= ResetUI;
-            // EventManager.RequestSkipStep -= HandleSkipRequest;
+            EventManager.RequestSkipStep -= HandleSkipRequest;
             // EventManager.RequestPreviousStep -= PreviousStep;
         }
 
-        /*
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.N) || Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                if (_refManager != null && _refManager.FaultManager != null && _refManager.FaultManager.IsFaultStart)
+                {
+                    Debug.Log("[UIManager] Key Shortcut (N/RightArrow) -> Fast Skip Step");
+                    HandleSkipRequest();
+                }
+            }
+        }
+
         private void HandleSkipRequest()
         {
             SkipCurrentStep(true);
         }
-        */
 
         public void SetToolsUI(bool open, bool animate = true)
         {
@@ -313,18 +334,17 @@ namespace CCEPL_CAD
 
         void OnStepComplete()
         {
-            if(!RefManager.Instance.FaultManager.IsFaultStart) return;
+            if (_refManager == null || _refManager.FaultManager == null || !_refManager.FaultManager.IsFaultStart) return;
             _tools.ForEach(x => x.ResetSelection());
             _faultSteps[StepPerform].OnStepComplete();
 
             int stepNumber = StepPerform + 1;
-            int wrongAttempts = (StepPerform < _wrongAttemptsPerStep.Count) ? _wrongAttemptsPerStep[StepPerform] : 0;
             int totalSteps = _faultSteps.Count;
             bool isLastStep = (StepPerform + 1 >= _faultSteps.Count);
 
             StepPerform++;
 
-            EventManager.OnStepAccomplished?.Invoke(_currentFaultIndex, stepNumber, wrongAttempts, totalSteps, isLastStep);
+            EventManager.OnStepAccomplished?.Invoke(_currentFaultIndex, stepNumber, totalSteps, isLastStep);
 
             CheckAllStepAreCompleted();
         }
@@ -344,9 +364,9 @@ namespace CCEPL_CAD
                 if (_uiRef.BackStepBtn != null) _uiRef.BackStepBtn.interactable = false;
                 if (_uiRef.FaultResetBtn != null) _uiRef.FaultResetBtn.interactable = false;
                 EventManager.OnLogMessage?.Invoke("Fault Repaired Successfully", false);
-                Debug.LogError($"Attempts {JsonConvert.SerializeObject(_wrongAttemptsPerStep.ToArray())}");
+                Debug.Log($"[UIManager] Fault Repaired Successfully | Total Mistakes: {_faultMistakes}");
 
-                EventManager.OnFaultFinished?.Invoke(_currentFaultIndex, _faultSteps.Count, new List<int>(_wrongAttemptsPerStep));
+                EventManager.OnFaultFinished?.Invoke(_currentFaultIndex, _faultSteps.Count, _faultMistakes);
             }
             else
             {
@@ -386,6 +406,9 @@ namespace CCEPL_CAD
             if (_uiRef.BackStepBtn != null) _uiRef.BackStepBtn.interactable = false;
             if (_uiRef.FaultResetBtn != null) _uiRef.FaultResetBtn.interactable = true;
             HideRemovedControlButtons();
+
+            _faultMistakes = 0;
+            UpdateMistakeCounterUI();
 
             //Testmode is default
             _uiRef.TestModeToggle.SetIsOnWithoutNotify(true);
@@ -434,7 +457,7 @@ namespace CCEPL_CAD
                 return;
             }
 
-            if (RefManager.Instance.FaultManager.IsFaultStart)
+            if (_refManager != null && _refManager.FaultManager != null && _refManager.FaultManager.IsFaultStart)
             {
                 ResetUI();
             }
@@ -444,15 +467,15 @@ namespace CCEPL_CAD
 
         private void EnsureFaultsLoaded()
         {
-            if (_faults == null && RefManager.Instance != null && RefManager.Instance.FaultManager != null)
+            if (_faults == null && _refManager != null && _refManager.FaultManager != null)
             {
-                _faults = RefManager.Instance.FaultManager.faults;
+                _faults = _refManager.FaultManager.faults;
             }
         }
 
         void OnFaultClick(int faultIndex)
         {
-            if(RefManager.Instance.FaultManager.IsFaultStart)
+            if (_refManager != null && _refManager.FaultManager != null && _refManager.FaultManager.IsFaultStart)
             {
                 EventManager.OnLogMessage?.Invoke("Please finish the selected fault first.", true);
                 return;
@@ -468,7 +491,9 @@ namespace CCEPL_CAD
             SetModesUI(true);
 
             _currentFaultIndex = faultIndex;
-            RefManager.Instance.FaultManager.IsFaultStart = true;
+            _faultMistakes = 0;
+            if (_refManager != null && _refManager.FaultManager != null) _refManager.FaultManager.IsFaultStart = true;
+            UpdateMistakeCounterUI();
             _faultTabs.ForEach(x => x.ResetGraphics());
             var matchingTab = _faultTabs.Find(x => x._faultIndex == faultIndex);
             if (matchingTab != null)
@@ -490,6 +515,8 @@ namespace CCEPL_CAD
             step.OnStepStart();
             ScrollToStep(step);
             StepPerform = 0;
+            _faultMistakes = 0;
+            UpdateMistakeCounterUI();
             _wrongAttemptsPerStep = new List<int>();
             _stepsAttempt = new List<int>();
             for (int i = 0; i < _faultSteps.Count; i++)
@@ -518,12 +545,15 @@ namespace CCEPL_CAD
         void WrongToolSelected()
         {
             EventManager.OnLogMessage?.Invoke("Wrong tool selected. Please select a right tool.", true);
+            _faultMistakes++;
+            UpdateMistakeCounterUI();
+
             if (StepPerform >= 0 && StepPerform < _wrongAttemptsPerStep.Count)
             {
                 _wrongAttemptsPerStep[StepPerform]++;
                 if (StepPerform < _stepsAttempt.Count)
                 {
-                    _stepsAttempt[StepPerform] = _wrongAttemptsPerStep[StepPerform];
+                    _stepsAttempt[StepPerform] = _faultMistakes;
                 }
 
                 if (_wrongAttemptsPerStep[StepPerform] >= maxAttempt)
@@ -546,7 +576,6 @@ namespace CCEPL_CAD
             int stepNumber = StepPerform + 1;
             int totalSteps = _faultSteps.Count;
             bool isLastStep = (StepPerform + 1 >= _faultSteps.Count);
-            int wrongAttempts = isSkipped ? 0 : ((StepPerform < _wrongAttemptsPerStep.Count) ? _wrongAttemptsPerStep[StepPerform] : maxAttempt);
 
             if (isSkipped)
             {
@@ -572,7 +601,7 @@ namespace CCEPL_CAD
             {
                 _faultAnimation = null;
                 StepPerform++;
-                EventManager.OnStepAccomplished?.Invoke(_currentFaultIndex, stepNumber, wrongAttempts, totalSteps, isLastStep);
+                EventManager.OnStepAccomplished?.Invoke(_currentFaultIndex, stepNumber, totalSteps, isLastStep);
                 CheckAllStepAreCompleted();
             });
         }
@@ -614,7 +643,7 @@ namespace CCEPL_CAD
                 : 0;
             int totalSteps = _faultSteps.Count;
 
-            EventManager.OnStepAccomplished?.Invoke(_currentFaultIndex, lastCompletedStep, wrongAttemptsOnLastCompleted, totalSteps, false);
+            EventManager.OnStepAccomplished?.Invoke(_currentFaultIndex, lastCompletedStep, totalSteps, false);
 
             if (targetStep.Step != null && targetStep.Step.AnimationClip != null)
             {
@@ -653,8 +682,13 @@ namespace CCEPL_CAD
                 _faultAnimation.Kill();
                 _faultAnimation = null;
             }
-            RefManager.Instance.FaultManager.IsFaultStart = false;
+            if (_refManager != null && _refManager.FaultManager != null)
+            {
+                _refManager.FaultManager.IsFaultStart = false;
+            }
             _currentFaultIndex = -1;
+            _faultMistakes = 0;
+            UpdateMistakeCounterUI();
             _wrongAttemptsPerStep?.Clear();
             _stepsAttempt?.Clear();
             _uiRef.RepairedFaultSubmitBtn.transform.parent.gameObject.SetActive(false);
@@ -684,6 +718,38 @@ namespace CCEPL_CAD
             SetToolsUI(false);
             SetModesUI(false);
             EventManager.OnFaultCompleted?.Invoke();
+        }
+
+        private void UpdateMistakeCounterUI()
+        {
+            if (_uiRef == null) return;
+
+            var faultMgr = _refManager != null ? _refManager.FaultManager : null;
+            bool isFaultActive = _currentFaultIndex >= 0 || (faultMgr != null && faultMgr.IsFaultStart);
+            string countText = $"Mistakes: {_faultMistakes}";
+            Color textColor = _faultMistakes > 0 ? new Color(0.85f, 0.0f, 0.0f, 1f) : new Color(0.2f, 0.2f, 0.2f, 1f);
+
+            if (_uiRef.MistakeCounterText != null)
+            {
+                _uiRef.MistakeCounterText.text = countText;
+                _uiRef.MistakeCounterText.color = textColor;
+            }
+
+            if (_uiRef.MistakeCounterBadge != null)
+            {
+                _uiRef.MistakeCounterBadge.SetActive(true);
+            }
+
+            if (_uiRef.HudMistakeCounterText != null)
+            {
+                _uiRef.HudMistakeCounterText.text = countText;
+                _uiRef.HudMistakeCounterText.color = textColor;
+            }
+
+            if (_uiRef.HudMistakeCounterBadge != null)
+            {
+                _uiRef.HudMistakeCounterBadge.SetActive(isFaultActive);
+            }
         }
 
         void DisaplayMessage(string message, Color textColor, Color bgColor, Color borderColor)

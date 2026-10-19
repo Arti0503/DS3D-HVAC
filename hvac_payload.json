@@ -3,49 +3,49 @@
     "Speed": [
       {
         "Name": "BlueArrowOut",
-        "Value": 5.0
+        "Value": 5
       },
       {
         "Name": "Fan1",
-        "Value": 5.0
+        "Value": 0
       },
       {
         "Name": "Fan2",
-        "Value": 5.0
+        "Value": 0
       },
       {
         "Name": "GreenArrowIN1",
-        "Value": 5.0
+        "Value": 5
       },
       {
         "Name": "GreenArrowIN2",
-        "Value": 5.0
+        "Value": 5
       },
       {
         "Name": "YellowArrowIn",
-        "Value": 5.0
+        "Value": 5
       }
     ],
     "Amplitude": [
       {
         "Name": "RedArrow_Inlet",
-        "Value": 5.0
+        "Value": 0.0
       },
       {
         "Name": "RedArrow_Outlet",
-        "Value": 5.0
+        "Value": 0.0
       },
       {
         "Name": "BlueArrow_Outlet",
-        "Value": 5.0
+        "Value": 0.0
       },
       {
         "Name": "GreenArrow_Inlet",
-        "Value": 5.0
+        "Value": 0.0
       },
       {
         "Name": "YellowArrow_Inlet",
-        "Value": 5.0
+        "Value": 0.0
       },
       {
         "Name": "FADL",
@@ -62,16 +62,72 @@
     ],
     "Boolean": [
       {
+        "Name": "DS3D_OFF",
+        "Value": 0
+      },
+      {
         "Name": "ShowHideObjects",
         "Value": false
       },
       {
-        "Name": "Application Quit",
-        "Value": false
+        "Name": "Compresor 1_Highlights",
+        "Value": true
       },
       {
-        "Name": "Compression_Highlights",
+        "Name": "Compresor 2_Highlights",
         "Value": true
+      },
+      {
+        "Name": "Compresor 3_Highlights",
+        "Value": true
+      },
+      {
+        "Name": "Compresor 4_Highlights",
+        "Value": true
+      }
+    ],
+    "Fault": [
+      {
+        "Name": "Fault_Code_Trigger",
+        "Value": 0
+      },
+      {
+        "Name": "Fault_Cause_Trigger",
+        "Value": 0
+      },
+      {
+        "Name": "Fault_Command_Action",
+        "Value": 0
+      }
+    ],
+    "Spare": [
+      {
+        "Name": "Spare_24",
+        "Value": 0
+      },
+      {
+        "Name": "Spare_25",
+        "Value": 0
+      },
+      {
+        "Name": "Spare_26",
+        "Value": 0
+      },
+      {
+        "Name": "Spare_27",
+        "Value": 0
+      },
+      {
+        "Name": "Spare_28",
+        "Value": 0
+      },
+      {
+        "Name": "Spare_29",
+        "Value": 0
+      },
+      {
+        "Name": "Spare_30",
+        "Value": 0
       }
     ]
   }

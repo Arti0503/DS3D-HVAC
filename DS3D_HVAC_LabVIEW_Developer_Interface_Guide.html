@@ -352,17 +352,17 @@
 
 <div class="page-break"></div>
 
-<h3>2.4 Continuous Speed &amp; Animation Sliders</h3>
-<p>LabVIEW transmits simulation speed variables, color intensity lerps, and damper positions to Port 9000.</p>
+<h3>2.4 Master Composite JSON Schema (Speed, Amplitude, Boolean, Fault, Spare)</h3>
+<p>LabVIEW transmits comprehensive simulation parameters, individual compressor highlights, fault trigger/reset actions, and spare telemetry registers via a single unified payload over Port 9000:</p>
 <div class="code-block">{
   "Hvac": {
     "Speed": [
-      { "Name": "BlueArrowOut",   "Value": 5.0 },
-      { "Name": "Fan1",           "Value": 5.0 },
-      { "Name": "Fan2",           "Value": 5.0 },
-      { "Name": "GreenArrowIN1",  "Value": 5.0 },
-      { "Name": "GreenArrowIN2",  "Value": 5.0 },
-      { "Name": "YellowArrowIn",  "Value": 5.0 }
+      { "Name": "BlueArrowOut",   "Value": 5 },
+      { "Name": "Fan1",           "Value": 0 },
+      { "Name": "Fan2",           "Value": 0 },
+      { "Name": "GreenArrowIN1",  "Value": 5 },
+      { "Name": "GreenArrowIN2",  "Value": 5 },
+      { "Name": "YellowArrowIn",  "Value": 5 }
     ],
     "Amplitude": [
       { "Name": "RedArrow_Inlet",    "Value": 0.0 },
@@ -375,12 +375,55 @@
       { "Name": "RAD",               "Value": 0.0 }
     ],
     "Boolean": [
-      { "Name": "ShowHideObjects",        "Value": false },
-      { "Name": "Quit",                   "Value": false },
-      { "Name": "Compression_Highlights", "Value": true }
+      { "Name": "DS3D_OFF",              "Value": 0 },
+      { "Name": "ShowHideObjects",       "Value": false },
+      { "Name": "Compresor 1_Highlights", "Value": true },
+      { "Name": "Compresor 2_Highlights", "Value": true },
+      { "Name": "Compresor 3_Highlights", "Value": true },
+      { "Name": "Compresor 4_Highlights", "Value": true }
+    ],
+    "Fault": [
+      { "Name": "Fault_Code_Trigger",    "Value": 0 },
+      { "Name": "Fault_Cause_Trigger",   "Value": 0 },
+      { "Name": "Fault_Command_Action",  "Value": 0 }
+    ],
+    "Spare": [
+      { "Name": "Spare_24", "Value": 0 },
+      { "Name": "Spare_25", "Value": 0 },
+      { "Name": "Spare_26", "Value": 0 },
+      { "Name": "Spare_27", "Value": 0 },
+      { "Name": "Spare_28", "Value": 0 },
+      { "Name": "Spare_29", "Value": 0 },
+      { "Name": "Spare_30", "Value": 0 }
     ]
   }
 }</div>
+
+<h4>Field Functionality &amp; Behavior:</h4>
+<ul style="margin: 4px 0 12px 18px; padding: 0; font-size: 8.5pt;">
+  <li><strong>Fault Array:</strong>
+    <ul>
+      <li><code>Fault_Code_Trigger</code>: Target Fault ID (e.g. <code>101</code>, <code>102</code>).</li>
+      <li><code>Fault_Cause_Trigger</code>: Target Sub-cause identifier (e.g. <code>1</code>).</li>
+      <li><code>Fault_Command_Action</code>: Action strobe control:
+        <ul>
+          <li><code>0</code> = <strong>Idle / No Action</strong> (normal continuous streaming).</li>
+          <li><code>1</code> = <strong>Trigger Fault</strong> (starts scenario for <code>Fault_Code_Trigger</code>, slides panels open, focuses camera, turns off idle highlights/arrows).</li>
+          <li><code>2</code> = <strong>Reset Fault</strong> (aborts active scenario, closes UI panels, restores camera, turns highlights/arrows back on).</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Boolean Array:</strong>
+    <ul>
+      <li><code>DS3D_OFF</code>: <code>0</code> / <code>false</code> = normal run; <code>1</code> / <code>true</code> = close application.</li>
+      <li><code>ShowHideObjects</code>: <code>false</code> / <code>true</code> toggles equipment casing visibility.</li>
+      <li><code>Compresor 1..4_Highlights</code>: Independent boolean toggles for <code>Compression1</code>, <code>Compression2</code>, <code>Compression3</code>, and <code>Compression4</code> 3D highlights. Mixed integer (<code>0/1</code>) and boolean (<code>true/false</code>) representations are both fully supported.</li>
+    </ul>
+  </li>
+  <li><strong>Spare Array:</strong> Reserved expansion channels (<code>Spare_24</code> through <code>Spare_30</code>) safely parsed and maintained in Unity memory.</li>
+</ul>
+
 
 <h2>3. Outbound Telemetry (Unity &rarr; LabVIEW, Port 5005)</h2>
 <p>Unity transmits real-time execution feedback and training scoring over UDP port 5005 as UTF-8 encoded JSON objects.</p>

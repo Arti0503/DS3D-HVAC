@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Newtonsoft.Json;
 
 namespace CCEPL_CAD.Models
 {
@@ -17,7 +18,6 @@ namespace CCEPL_CAD.Models
         public string @event = "step_completed";
         public int fault_code;
         public int step_number;
-        public int wrong_attempts;
         public int total_steps;
         public string status = "success";
         public bool is_fault_completed;
@@ -32,7 +32,7 @@ namespace CCEPL_CAD.Models
         public int fault_code;
         public string status = "success";
         public int total_steps;
-        public List<int> wrong_attempts_per_step;
+        public int total_mistakes;
         public bool is_fault_completed = true;
         public bool compression_highlights = true;
         public bool arrows_active = true;
@@ -71,6 +71,15 @@ namespace CCEPL_CAD.Models
     {
         public string @event = "arrows_changed";
         public bool arrows_active;
+        public string status;
+    }
+
+    [Serializable]
+    public class SensorHighlightPayload
+    {
+        public string @event = "sensor_highlight_changed";
+        public string sensor;
+        public bool is_visible;
         public string status;
     }
 
@@ -467,18 +476,83 @@ namespace CCEPL_CAD.Models
         public SystemSettings Door;
     }
 
+    public class FlexibleBoolConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(bool) || objectType == typeof(bool?);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Boolean)
+            {
+                return (bool)reader.Value;
+            }
+            if (reader.TokenType == JsonToken.Integer || reader.TokenType == JsonToken.Float)
+            {
+                return Convert.ToInt64(reader.Value) != 0;
+            }
+            if (reader.TokenType == JsonToken.String)
+            {
+                string text = (string)reader.Value;
+                if (bool.TryParse(text, out bool b)) return b;
+                if (int.TryParse(text, out int i)) return i != 0;
+            }
+            return false;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            writer.WriteValue(value);
+        }
+    }
+
+    public class FlexibleFloatConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(float) || objectType == typeof(float?);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Float || reader.TokenType == JsonToken.Integer)
+            {
+                return Convert.ToSingle(reader.Value);
+            }
+            if (reader.TokenType == JsonToken.String)
+            {
+                string text = (string)reader.Value;
+                if (float.TryParse(text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float f))
+                {
+                    return f;
+                }
+            }
+            return 0f;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            writer.WriteValue(value);
+        }
+    }
+
     [Serializable]
     public class SystemSettings
     {
         public List<NumericParameter> Speed;
         public List<NumericParameter> Amplitude;
         public List<BooleanParameter> Boolean;
+        public List<NumericParameter> Fault;
+        public List<NumericParameter> Spare;
     }
 
     [Serializable]
     public class NumericParameter
     {
         public string Name;
+        [JsonConverter(typeof(FlexibleFloatConverter))]
         public float Value;
     }
 
@@ -486,6 +560,7 @@ namespace CCEPL_CAD.Models
     public class BooleanParameter
     {
         public string Name;
+        [JsonConverter(typeof(FlexibleBoolConverter))]
         public bool Value;
     }
 

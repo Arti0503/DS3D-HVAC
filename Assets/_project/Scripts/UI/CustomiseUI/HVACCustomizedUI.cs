@@ -44,14 +44,20 @@ namespace CCEPL_CAD
         {
             base.OnEnable();
             EventManager.RequestToggleCompressionHighlights += SetCompressionHighlightsVisible;
+            EventManager.RequestToggleCompressorHighlight += SetIndividualCompressorHighlightVisible;
+            EventManager.RequestToggleShowHideObjects += SetShowHideObjects;
             EventManager.RequestToggleArrows += SetArrowsVisible;
+            EventManager.RequestToggleSensorHighlight += SetSensorHighlightVisible;
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
             EventManager.RequestToggleCompressionHighlights -= SetCompressionHighlightsVisible;
+            EventManager.RequestToggleCompressorHighlight -= SetIndividualCompressorHighlightVisible;
+            EventManager.RequestToggleShowHideObjects -= SetShowHideObjects;
             EventManager.RequestToggleArrows -= SetArrowsVisible;
+            EventManager.RequestToggleSensorHighlight -= SetSensorHighlightVisible;
         }
 
         private void InitializeVisualReferences()
@@ -127,6 +133,57 @@ namespace CCEPL_CAD
             EventManager.OnCompressionHighlightsChanged?.Invoke(isVisible);
         }
 
+        public void SetIndividualCompressorHighlightVisible(int compressorIndex, bool isVisible)
+        {
+            string targetName = "Compression" + compressorIndex;
+            string altName = "Compressor" + compressorIndex;
+            string altName2 = "Compressor " + compressorIndex;
+            string altName3 = "Compresor " + compressorIndex;
+
+            for (int i = 0; i < CompressionHighlightObjects.Count; i++)
+            {
+                var obj = CompressionHighlightObjects[i];
+                if (obj == null) continue;
+
+                if (string.Equals(obj.name, targetName, StringComparison.OrdinalIgnoreCase) ||
+                    obj.name.IndexOf(targetName, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    obj.name.IndexOf(altName, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    obj.name.IndexOf(altName2, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    obj.name.IndexOf(altName3, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    obj.name.EndsWith(compressorIndex.ToString()))
+                {
+                    obj.SetActive(isVisible);
+                }
+            }
+
+            bool anyChildActive = false;
+            for (int i = 0; i < CompressionHighlightObjects.Count; i++)
+            {
+                var obj = CompressionHighlightObjects[i];
+                if (obj != null && obj.activeSelf)
+                {
+                    anyChildActive = true;
+                    break;
+                }
+            }
+
+            if (CompresserHighLightParent != null)
+            {
+                CompresserHighLightParent.SetActive(anyChildActive);
+            }
+            AreCompressionHighlightsActive = anyChildActive;
+            EventManager.OnCompressionHighlightsChanged?.Invoke(anyChildActive);
+        }
+
+        public void SetShowHideObjects(bool isVisible)
+        {
+            if (ObjectVisibilityManager != null)
+            {
+                ObjectVisibilityManager.objectsVisible = isVisible;
+                ObjectVisibilityManager.ToggleVisibility();
+            }
+        }
+
         public void SetArrowsVisible(bool isVisible)
         {
             AreArrowsActive = isVisible;
@@ -135,6 +192,58 @@ namespace CCEPL_CAD
                 if (obj != null) obj.SetActive(isVisible);
             }
             EventManager.OnArrowsChanged?.Invoke(isVisible);
+        }
+
+        private readonly Dictionary<string, GameObject> _cachedSensors = new(StringComparer.OrdinalIgnoreCase);
+
+        public void SetSensorHighlightVisible(string sensorType, bool isVisible)
+        {
+            if (string.IsNullOrEmpty(sensorType)) return;
+
+            if (!_cachedSensors.TryGetValue(sensorType, out var targetObj) || targetObj == null)
+            {
+                targetObj = FindSensorObject(sensorType);
+                if (targetObj != null)
+                {
+                    _cachedSensors[sensorType] = targetObj;
+                }
+            }
+
+            if (targetObj != null)
+            {
+                var outline = targetObj.GetComponent<Outline>();
+                if (outline == null)
+                {
+                    outline = targetObj.AddComponent<Outline>();
+                    outline.OutlineMode = Outline.Mode.OutlineAll;
+                    outline.OutlineWidth = 4f;
+                }
+                outline.OutlineColor = new Color(0.1f, 0.85f, 1f, 1f); // Distinct Cyan highlight
+                outline.enabled = isVisible;
+                Debug.Log($"[HVACCustomizedUI] Sensor Highlight '{sensorType}' -> {isVisible} on '{targetObj.name}'");
+            }
+            else
+            {
+                Debug.LogWarning($"[HVACCustomizedUI] Sensor Highlight '{sensorType}' GameObject not found!");
+            }
+
+            EventManager.OnSensorHighlightChanged?.Invoke(sensorType, isVisible);
+        }
+
+        private GameObject FindSensorObject(string sensorType)
+        {
+            string lower = sensorType.ToLowerInvariant();
+            var allT = GetComponentsInChildren<Transform>(true);
+
+            foreach (var t in allT)
+            {
+                string n = t.name.ToLowerInvariant();
+                if (lower == "fat" && (n == "fat_sensor" || n.StartsWith("fat_sensor"))) return t.gameObject;
+                if (lower == "rat" && (n == "rat_sensor.001" || n == "rat_sensor" || n.StartsWith("rat_sensor"))) return t.gameObject;
+                if (lower == "sat" && (n == "sat_sensor" || n.StartsWith("sat_sensor"))) return t.gameObject;
+                if (lower == "smoke" && (n == "smoke_detector" || n.StartsWith("smoke_detector"))) return t.gameObject;
+            }
+            return null;
         }
 
         protected override void Start()

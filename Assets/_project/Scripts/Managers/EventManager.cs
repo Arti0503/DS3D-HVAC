@@ -28,16 +28,20 @@ namespace CCEPL_CAD
         public static Action<string> TriggerDisplayText;
 
         // LabVIEW Telemetry & Remote Control
-        public static Action<int, int, int, int, bool> OnStepAccomplished; // (faultCode, stepNumber, wrongAttempts, totalSteps, isFaultCompleted)
-        public static Action<int, int, List<int>> OnFaultFinished; // (faultCode, totalSteps, wrongAttemptsPerStep)
+        public static Action<int, int, int, bool> OnStepAccomplished; // (faultCode, stepNumber, totalSteps, isFaultCompleted)
+        public static Action<int, int, int> OnFaultFinished; // (faultCode, totalSteps, totalMistakes)
         public static Action<int, int> OnFaultStarted; // (faultCode, totalSteps)
         public static Action<int> RequestTriggerFault; // (faultCode)
         public static Action RequestResetFault;
         public static Action<bool> RequestToggleCompressionHighlights; // (bool isVisible)
+        public static Action<int, bool> RequestToggleCompressorHighlight; // (int compressorIndex 1..4, bool isVisible)
+        public static Action<bool> RequestToggleShowHideObjects; // (bool isVisible)
         public static Action<bool> RequestToggleArrows; // (bool isVisible)
         public static Action<bool> OnCompressionHighlightsChanged; // (bool isVisible)
         public static Action<bool> OnArrowsChanged; // (bool isVisible)
-        // public static Action RequestSkipStep;
-        // public static Action RequestPreviousStep;
+        public static Action<string, bool> RequestToggleSensorHighlight; // ("FAT", "RAT", "SAT", "Smoke", bool isVisible)
+        public static Action<string, bool> OnSensorHighlightChanged; // ("FAT", "RAT", "SAT", "Smoke", bool isVisible)
+        public static Action RequestSkipStep;
+        public static Action RequestPreviousStep;
     }
 }

@@ -52,6 +52,9 @@ namespace CCEPL_CAD
             EventManager.OnFaultStarted += HandleFaultStarted;
             EventManager.OnCompressionHighlightsChanged += HandleCompressionHighlightsChanged;
             EventManager.OnArrowsChanged += HandleArrowsChanged;
+            EventManager.OnSensorHighlightChanged += HandleSensorHighlightChanged;
+            EventManager.ResetAnimation += HandleReset;
+            EventManager.RequestResetFault += HandleReset;
         }
 
         private void OnDisable()
@@ -62,6 +65,9 @@ namespace CCEPL_CAD
             EventManager.OnFaultStarted -= HandleFaultStarted;
             EventManager.OnCompressionHighlightsChanged -= HandleCompressionHighlightsChanged;
             EventManager.OnArrowsChanged -= HandleArrowsChanged;
+            EventManager.OnSensorHighlightChanged -= HandleSensorHighlightChanged;
+            EventManager.ResetAnimation -= HandleReset;
+            EventManager.RequestResetFault -= HandleReset;
         }
 
         private void Start()
@@ -254,7 +260,7 @@ namespace CCEPL_CAD
 
         #region Telemetry & Step Progress Handlers
 
-        private void HandleStepAccomplished(int faultCode, int stepNumber, int wrongAttempts, int totalSteps, bool isFaultCompleted)
+        private void HandleStepAccomplished(int faultCode, int stepNumber, int totalSteps, bool isFaultCompleted)
         {
             if (_stepSendFormat == StepSendFormat.RawNumber || _stepSendFormat == StepSendFormat.Both)
             {
@@ -268,7 +274,6 @@ namespace CCEPL_CAD
                     @event = "step_completed",
                     fault_code = faultCode,
                     step_number = stepNumber,
-                    wrong_attempts = wrongAttempts,
                     total_steps = totalSteps,
                     status = "success",
                     is_fault_completed = isFaultCompleted,
@@ -280,7 +285,7 @@ namespace CCEPL_CAD
             }
         }
 
-        private void HandleFaultFinished(int faultCode, int totalSteps, List<int> wrongAttemptsPerStep)
+        private void HandleFaultFinished(int faultCode, int totalSteps, int totalMistakes)
         {
             var payload = new FaultCompletedPayload
             {
@@ -288,7 +293,7 @@ namespace CCEPL_CAD
                 fault_code = faultCode,
                 status = "success",
                 total_steps = totalSteps,
-                wrong_attempts_per_step = wrongAttemptsPerStep,
+                total_mistakes = totalMistakes,
                 is_fault_completed = true,
                 compression_highlights = true,
                 arrows_active = true
@@ -338,6 +343,25 @@ namespace CCEPL_CAD
             SendString(json);
         }
 
+        private void HandleSensorHighlightChanged(string sensor, bool isVisible)
+        {
+            var payload = new SensorHighlightPayload
+            {
+                @event = "sensor_highlight_changed",
+                sensor = sensor,
+                is_visible = isVisible,
+                status = isVisible ? "enabled" : "disabled"
+            };
+            string json = JsonConvert.SerializeObject(payload, Formatting.None);
+            SendString(json);
+        }
+
+        private void HandleReset()
+        {
+            _lastFaultCommandAction = 0;
+            _lastFaultCodeTrigger = 0;
+        }
+
         #endregion
 
         #region Decoding
@@ -370,6 +394,9 @@ namespace CCEPL_CAD
             }
         }
 
+        private int _lastFaultCommandAction = 0;
+        private int _lastFaultCodeTrigger = 0;
+
         private void DecodeJsonPacket(string jsonString)
         {
             try
@@ -379,13 +406,24 @@ namespace CCEPL_CAD
                 JToken token = JToken.Parse(jsonString);
                 if (token is not JObject parsedObject) return;
 
-                // 1. Check for Command & Fault Triggering
-                if (TryProcessJsonCommand(parsedObject))
+                // 1. Check for Command & Fault Triggering (including Hvac.Fault array)
+                bool hasCommand = TryProcessJsonCommand(parsedObject);
+
+                // Check if this payload also contains continuous animation / settings data
+                bool hasSystemSettings = parsedObject.ContainsKey("Hvac") ||
+                                         parsedObject.ContainsKey("Bogie") ||
+                                         parsedObject.ContainsKey("Door") ||
+                                         parsedObject.ContainsKey("Speed") ||
+                                         parsedObject.ContainsKey("Amplitude") ||
+                                         parsedObject.ContainsKey("Boolean");
+
+                // If it was purely a command/fault packet without any settings, return early
+                if (hasCommand && !hasSystemSettings)
                 {
                     return;
                 }
 
-                // 2. Fallback to SystemSettings for Slider/Animation Parameters (Speed, Amplitude, Boolean)
+                // 2. Fallback / Process SystemSettings for Slider/Animation Parameters (Speed, Amplitude, Boolean)
                 SystemSettings targetSettings = null;
 
                 if (parsedObject.TryGetValue("Hvac", StringComparison.OrdinalIgnoreCase, out JToken hvacToken))
@@ -435,6 +473,54 @@ namespace CCEPL_CAD
                             {
                                 EventManager.RequestToggleArrows?.Invoke(bParam.Value);
                             }
+                            else if (string.Equals(bParam.Name, "ShowHideObjects", StringComparison.OrdinalIgnoreCase))
+                            {
+                                EventManager.RequestToggleShowHideObjects?.Invoke(bParam.Value);
+                            }
+                            else if (string.Equals(bParam.Name, "DS3D_OFF", StringComparison.OrdinalIgnoreCase) ||
+                                     string.Equals(bParam.Name, "Application Quit", StringComparison.OrdinalIgnoreCase))
+                            {
+                                if (bParam.Value)
+                                {
+#if UNITY_EDITOR
+                                    UnityEditor.EditorApplication.isPlaying = false;
+#else
+                                    Application.Quit();
+#endif
+                                }
+                            }
+                            else
+                            {
+                                int compIdx = ExtractCompressorIndex(bParam.Name);
+                                if (compIdx >= 1 && compIdx <= 4)
+                                {
+                                    EventManager.RequestToggleCompressorHighlight?.Invoke(compIdx, bParam.Value);
+                                }
+                                else if (string.Equals(bParam.Name, "FAT_Sensor_Highlights", StringComparison.OrdinalIgnoreCase) ||
+                                         string.Equals(bParam.Name, "FAT_Sensor", StringComparison.OrdinalIgnoreCase) ||
+                                         string.Equals(bParam.Name, "FAT", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    EventManager.RequestToggleSensorHighlight?.Invoke("FAT", bParam.Value);
+                                }
+                                else if (string.Equals(bParam.Name, "RAT_Sensor_Highlights", StringComparison.OrdinalIgnoreCase) ||
+                                         string.Equals(bParam.Name, "RAT_Sensor", StringComparison.OrdinalIgnoreCase) ||
+                                         string.Equals(bParam.Name, "RAT", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    EventManager.RequestToggleSensorHighlight?.Invoke("RAT", bParam.Value);
+                                }
+                                else if (string.Equals(bParam.Name, "SAT_Sensor_Highlights", StringComparison.OrdinalIgnoreCase) ||
+                                         string.Equals(bParam.Name, "SAT_Sensor", StringComparison.OrdinalIgnoreCase) ||
+                                         string.Equals(bParam.Name, "SAT", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    EventManager.RequestToggleSensorHighlight?.Invoke("SAT", bParam.Value);
+                                }
+                                else if (string.Equals(bParam.Name, "Smoke_Detector_Highlights", StringComparison.OrdinalIgnoreCase) ||
+                                         string.Equals(bParam.Name, "Smoke_Detector", StringComparison.OrdinalIgnoreCase) ||
+                                         string.Equals(bParam.Name, "Smoke", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    EventManager.RequestToggleSensorHighlight?.Invoke("Smoke", bParam.Value);
+                                }
+                            }
                         }
                     }
                 }
@@ -453,7 +539,13 @@ namespace CCEPL_CAD
 
         private bool TryProcessJsonCommand(JObject obj)
         {
-            // A. Check for explicit "command" field
+            // A. Check for nested or direct Fault array: "Hvac.Fault" or top-level "Fault"
+            if (TryProcessFaultArray(obj))
+            {
+                return true;
+            }
+
+            // B. Check for explicit "command" field
             if (obj.TryGetValue("command", StringComparison.OrdinalIgnoreCase, out JToken cmdToken))
             {
                 string cmd = cmdToken.ToString().ToLowerInvariant();
@@ -469,9 +561,16 @@ namespace CCEPL_CAD
                 else if (cmd == "reset" || cmd == "reset_fault" || cmd == "stop")
                 {
                     Debug.Log("[UDPManager] Resetting Fault from JSON command");
+                    HandleReset();
                     EventManager.RequestResetFault?.Invoke();
                     var resetAck = new FaultResetPayload();
                     SendString(JsonConvert.SerializeObject(resetAck, Formatting.None));
+                    return true;
+                }
+                else if (cmd == "skip" || cmd == "skip_step" || cmd == "next" || cmd == "next_step")
+                {
+                    Debug.Log("[UDPManager] Skip Step from JSON command");
+                    EventManager.RequestSkipStep?.Invoke();
                     return true;
                 }
                 else if (cmd == "set_compression_highlights" || cmd == "compression_highlights" || cmd == "set_highlights" || cmd == "toggle_compression_highlights" || cmd == "compression")
@@ -504,23 +603,9 @@ namespace CCEPL_CAD
                     EventManager.RequestToggleArrows?.Invoke(state);
                     return true;
                 }
-                /*
-                else if (cmd == "skip" || cmd == "skip_step")
-                {
-                    Debug.Log("[UDPManager] Skipping Step from JSON command");
-                    EventManager.RequestSkipStep?.Invoke();
-                    return true;
-                }
-                else if (cmd == "back" || cmd == "back_step" || cmd == "previous_step" || cmd == "previous" || cmd == "reverse_step")
-                {
-                    Debug.Log("[UDPManager] Previous Step requested from JSON command");
-                    EventManager.RequestPreviousStep?.Invoke();
-                    return true;
-                }
-                */
             }
 
-            // B. Check for direct fault code property: { "fault": 101 } or { "fault_code": 101 }
+            // C. Check for direct fault code property: { "fault": 101 } or { "fault_code": 101 }
             if (TryExtractFaultCode(obj, out int directFaultCode))
             {
                 Debug.Log($"[UDPManager] Triggering Fault from direct JSON property: {directFaultCode}");
@@ -528,7 +613,7 @@ namespace CCEPL_CAD
                 return true;
             }
 
-            // C. Check for direct compression highlights property: { "compression_highlights": true/false }
+            // D. Check for direct compression highlights property: { "compression_highlights": true/false }
             string[] compKeys = { "compression_highlights", "compression_highlight", "compresser_highlight", "compressor_highlight", "compressor_highlights" };
             foreach (var key in compKeys)
             {
@@ -541,7 +626,7 @@ namespace CCEPL_CAD
                 }
             }
 
-            // D. Check for direct arrows property: { "arrows": true/false }
+            // E. Check for direct arrows property: { "arrows": true/false }
             string[] arrowKeys = { "arrows", "arrows_active", "arrow_active", "idle_arrows" };
             foreach (var key in arrowKeys)
             {
@@ -554,7 +639,7 @@ namespace CCEPL_CAD
                 }
             }
 
-            // E. Check for nested { "Hvac": { ... } }
+            // F. Check for nested { "Hvac": { ... } } properties
             if (obj.TryGetValue("Hvac", StringComparison.OrdinalIgnoreCase, out JToken hvacToken) && hvacToken is JObject hvacObj)
             {
                 if (TryExtractFaultCode(hvacObj, out int nestedCode))
@@ -589,6 +674,119 @@ namespace CCEPL_CAD
 
             return false;
         }
+
+        private bool TryProcessFaultArray(JObject obj)
+        {
+            JArray faultArray = null;
+
+            if (obj.TryGetValue("Fault", StringComparison.OrdinalIgnoreCase, out JToken directFaultToken) && directFaultToken is JArray directArray)
+            {
+                faultArray = directArray;
+            }
+            else if (obj.TryGetValue("Hvac", StringComparison.OrdinalIgnoreCase, out JToken hvacToken) && hvacToken is JObject hvacObj)
+            {
+                if (hvacObj.TryGetValue("Fault", StringComparison.OrdinalIgnoreCase, out JToken hvacFaultToken) && hvacFaultToken is JArray hvacArray)
+                {
+                    faultArray = hvacArray;
+                }
+            }
+
+            if (faultArray == null || faultArray.Count == 0) return false;
+
+            int faultCode = 0;
+            int faultCause = 0;
+            int faultCommand = 0;
+
+            foreach (var item in faultArray)
+            {
+                if (item is JObject paramObj)
+                {
+                    string name = paramObj.Value<string>("Name");
+                    float val = 0f;
+
+                    if (paramObj.TryGetValue("Value", StringComparison.OrdinalIgnoreCase, out JToken valToken))
+                    {
+                        if (valToken.Type == JTokenType.Integer || valToken.Type == JTokenType.Float)
+                        {
+                            val = valToken.Value<float>();
+                        }
+                        else if (float.TryParse(valToken.ToString(), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float parsed))
+                        {
+                            val = parsed;
+                        }
+                    }
+
+                    if (string.Equals(name, "Fault_Code_Trigger", StringComparison.OrdinalIgnoreCase))
+                    {
+                        faultCode = Mathf.RoundToInt(val);
+                    }
+                    else if (string.Equals(name, "Fault_Cause_Trigger", StringComparison.OrdinalIgnoreCase))
+                    {
+                        faultCause = Mathf.RoundToInt(val);
+                    }
+                    else if (string.Equals(name, "Fault_Command_Action", StringComparison.OrdinalIgnoreCase))
+                    {
+                        faultCommand = Mathf.RoundToInt(val);
+                    }
+                }
+            }
+
+            // Command Action: 0 = Idle, 1 = Trigger, 2 = Reset
+            if (faultCommand == 1) // Trigger Fault
+            {
+                if (faultCode > 0)
+                {
+                    if (_lastFaultCommandAction != 1 || _lastFaultCodeTrigger != faultCode)
+                    {
+                        _lastFaultCommandAction = 1;
+                        _lastFaultCodeTrigger = faultCode;
+                        Debug.Log($"[UDPManager] LabVIEW Fault Trigger Received -> Fault Code: {faultCode} (Cause: {faultCause})");
+                        EventManager.RequestTriggerFault?.Invoke(faultCode);
+                        return true;
+                    }
+                    return true;
+                }
+            }
+            else if (faultCommand == 2) // Reset Fault
+            {
+                if (_lastFaultCommandAction != 2)
+                {
+                    _lastFaultCommandAction = 2;
+                    _lastFaultCodeTrigger = 0;
+                    Debug.Log("[UDPManager] LabVIEW Fault Reset Received -> Executing Reset");
+                    EventManager.RequestResetFault?.Invoke();
+                    var resetAck = new FaultResetPayload();
+                    SendString(JsonConvert.SerializeObject(resetAck, Formatting.None));
+                    return true;
+                }
+                return true;
+            }
+            else if (faultCommand == 0) // Idle
+            {
+                _lastFaultCommandAction = 0;
+                if (faultCode == 0)
+                {
+                    _lastFaultCodeTrigger = 0;
+                }
+            }
+
+            return false;
+        }
+
+        private static int ExtractCompressorIndex(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return -1;
+            string lower = name.ToLowerInvariant();
+            if (lower.Contains("comp"))
+            {
+                if (lower.Contains("1")) return 1;
+                if (lower.Contains("2")) return 2;
+                if (lower.Contains("3")) return 3;
+                if (lower.Contains("4")) return 4;
+            }
+            return -1;
+        }
+
 
         private static bool TryExtractFaultCode(JObject obj, out int faultCode)
         {
@@ -672,20 +870,12 @@ namespace CCEPL_CAD
                 EventManager.RequestToggleArrows?.Invoke(false);
                 return;
             }
-            /*
-            if (lower == "skip" || lower == "skip_step")
+            if (lower == "skip" || lower == "skip_step" || lower == "next")
             {
                 Debug.Log("[UDPManager] Detected Raw Skip Command");
                 EventManager.RequestSkipStep?.Invoke();
                 return;
             }
-            if (lower == "back" || lower == "back_step" || lower == "previous_step" || lower == "previous" || lower == "reverse_step")
-            {
-                Debug.Log("[UDPManager] Detected Raw Back Step Command");
-                EventManager.RequestPreviousStep?.Invoke();
-                return;
-            }
-            */
 
             // 3. Fallback: CSV Sliders Packet
             DecodeCsvPacket(trimmed);
