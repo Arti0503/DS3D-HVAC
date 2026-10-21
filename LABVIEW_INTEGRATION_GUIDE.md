@@ -131,9 +131,11 @@ Sent when all steps of the procedure have been completed:
   "event": "fault_completed",
   "fault_code": 101,
   "status": "success",
-  "total_steps": 4,
-  "wrong_attempts_per_step": [0, 2, 1, 0],
-  "is_fault_completed": true
+  "total_steps": 16,
+  "total_mistakes": 0,
+  "is_fault_completed": true,
+  "compression_highlights": true,
+  "arrows_active": true
 }
 ```
 
@@ -142,10 +144,12 @@ Sent when all steps of the procedure have been completed:
 | :--- | :--- | :--- |
 | `event` | String | Always `"fault_completed"` |
 | `fault_code` | Integer | The completed fault code (e.g. `101`) |
-| `status` | String | `"success"` |
+| `status` | String | Always `"success"` |
 | `total_steps` | Integer | Total number of steps completed |
-| `wrong_attempts_per_step` | Array of Integers | Wrong tool clicks for each step in order `[Step1, Step2, ...]` |
+| `total_mistakes` | Integer (I32) | Total number of incorrect tool clicks made across all steps |
 | `is_fault_completed` | Boolean | Always `true` |
+| `compression_highlights` | Boolean | Restored back to `true` |
+| `arrows_active` | Boolean | Restored back to `true` |
 
 ---
 
@@ -167,14 +171,23 @@ Sent immediately when a fault is activated in Unity (via LabVIEW command or UI c
 
 In LabVIEW, use the **Unflatten From JSON** primitive (`Programming -> String -> Flatten/Unflatten String -> Unflatten From JSON`):
 
-1. **Create a LabVIEW Cluster** with elements matching the exact field names and types:
-   - `event` (String Control)
-   - `fault_code` (Numeric Control, I32)
-   - `step_number` (Numeric Control, I32)
-   - `wrong_attempts` (Numeric Control, I32)
-   - `total_steps` (Numeric Control, I32)
-   - `status` (String Control)
-   - `is_fault_completed` (Boolean Control)
-2. Wire the incoming UDP string into the **JSON String** input.
-3. Wire the Cluster type into the **type and defaults** input.
-4. Unbundle the resulting Cluster to directly wire `step_number`, `wrong_attempts`, and `status` to your LabVIEW UI indicators and scoring calculation VIs.
+### Cluster for Fault Completed Summary (`fault_completed`)
+To display the summary, create a Cluster containing:
+- `event` (String Control) — `"fault_completed"`
+- `fault_code` (Numeric Control, I32)
+- `status` (String Control) — `"success"`
+- `total_steps` (Numeric Control, I32)
+- `total_mistakes` (Numeric Control, I32) — Total mistakes across the entire fault (single integer, not per-step)
+- `is_fault_completed` (Boolean Control) — `true`
+
+### Cluster for Step Progress (`step_completed`)
+To track step-by-step progress, create a Cluster containing:
+- `event` (String Control) — `"step_completed"`
+- `fault_code` (Numeric Control, I32)
+- `step_number` (Numeric Control, I32)
+- `wrong_attempts` (Numeric Control, I32)
+- `total_steps` (Numeric Control, I32)
+- `status` (String Control)
+- `is_fault_completed` (Boolean Control)
+
+Wire the incoming UDP string into the **JSON String** input and unbundle the cluster to wire directly to your indicators.

@@ -1,0 +1,3381 @@
+{
+  "project": "DS3D-HVAC",
+  "description": "Master Catalog of Procedural Fault Scenarios, Maintenance Steps, and Tool Requirements",
+  "total_faults": 14,
+  "faults": [
+    {
+      "fault_code": 101,
+      "fault_name": "No HVAC operations",
+      "total_steps": 16,
+      "steps": [
+        {
+          "step_number": 1,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 2,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 3,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 4,
+          "message": "Remove electrical control panel assembly",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Electric control panel",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 5,
+          "message": "Check all circuit breakers and close.",
+          "required_tool_id": 63,
+          "required_tool_name": "Multimeter",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 6,
+          "message": "Unplug the connected wires",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 7,
+          "message": "Remove electrical plugs.",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 8,
+          "message": "Replace the plugs",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 9,
+          "message": "Connect the electrical plugs.",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 10,
+          "message": "Close electrical control panel assembly",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 11,
+          "message": "Open supply air cover",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 12,
+          "message": "Clean the supply air cover (1) with compressed air.",
+          "required_tool_id": 27,
+          "required_tool_name": "CompressedAirGun",
+          "component_name": "Air Blower",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 13,
+          "message": "Rotate supply air cover (1) motor with hand and ensure that only a light force is required to rotate it.",
+          "required_tool_id": 49,
+          "required_tool_name": "InsulatedHandGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 14,
+          "message": "Remove supply air blower",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 15,
+          "message": "Replace supply air blower",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 16,
+          "message": "Check working",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        }
+      ]
+    },
+    {
+      "fault_code": 102,
+      "fault_name": "No ventilation",
+      "total_steps": 24,
+      "steps": [
+        {
+          "step_number": 1,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 2,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 3,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 4,
+          "message": "Remove electrical control panel assembly",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Electric control panel",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 5,
+          "message": "Check all circuit breakers and close.",
+          "required_tool_id": 63,
+          "required_tool_name": "Multimeter",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 6,
+          "message": "Unplug the connected wires",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 7,
+          "message": "Remove electrical plugs.",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 8,
+          "message": "Replace the plugs",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 9,
+          "message": "Connect the electrical plugs.",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 10,
+          "message": "Close electrical control panel assembly",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 11,
+          "message": "Open supply air blower",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 12,
+          "message": "Clean the supply air blower (1) with compressed air.",
+          "required_tool_id": 27,
+          "required_tool_name": "CompressedAirGun",
+          "component_name": "Air Blower",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 13,
+          "message": "Rotate supply air blower (1) motor with hand and ensure that only a light force is required to rotate it.",
+          "required_tool_id": 49,
+          "required_tool_name": "InsulatedHandGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 14,
+          "message": "Remove supply air blower",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 15,
+          "message": "Replace supply air blower",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 16,
+          "message": "Close air supply blower",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 17,
+          "message": "Unscrew fresh air filter bolt",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 18,
+          "message": "Replace fresh air filter",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 19,
+          "message": "Clean the fresh air dampers (1) and damper motor (2) with dry compressed air.",
+          "required_tool_id": 17,
+          "required_tool_name": "BristleBrush",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 20,
+          "message": "Remove the fresh air dampers",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 21,
+          "message": "Replace the fresh air dampers",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 22,
+          "message": "Remove fresh air damper motor",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 23,
+          "message": "Replace fresh air damper motor",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 24,
+          "message": "Check working",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        }
+      ]
+    },
+    {
+      "fault_code": 103,
+      "fault_name": "Reduced ventilation",
+      "total_steps": 17,
+      "steps": [
+        {
+          "step_number": 1,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 2,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 3,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 4,
+          "message": "Open supply air blower",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 5,
+          "message": "Clean the supply air blower (1) with compressed air.",
+          "required_tool_id": 27,
+          "required_tool_name": "CompressedAirGun",
+          "component_name": "Air Blower",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 6,
+          "message": "Rotate supply air blower (1) motor with hand and ensure that only a light force is required to rotate it.",
+          "required_tool_id": 49,
+          "required_tool_name": "InsulatedHandGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 7,
+          "message": "Remove supply air blower",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 8,
+          "message": "Replace supply air blower",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 9,
+          "message": "Close air supply blower",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 10,
+          "message": "Unscrew bottom panel",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 11,
+          "message": "Remove bottom panel",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 12,
+          "message": "Unscrew return air damper",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 13,
+          "message": "Remove return air damper",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 14,
+          "message": "Check moisture indicator on the sight glass (1) to find any excessive moisture in the system.",
+          "required_tool_id": 31,
+          "required_tool_name": "ElectronicLeakDetector",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 15,
+          "message": "Locate the leak",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 16,
+          "message": "Repair the leak",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 17,
+          "message": "Check working",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        }
+      ]
+    },
+    {
+      "fault_code": 104,
+      "fault_name": "Suction low and discharge low",
+      "total_steps": 17,
+      "steps": [
+        {
+          "step_number": 1,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 2,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 3,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 4,
+          "message": "Check the evaporator coil (1) for any damages to the fins.",
+          "required_tool_id": 117,
+          "required_tool_name": "VisualInspectionLamp",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 5,
+          "message": "Check and defrost evaporator coil.",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 0,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 6,
+          "message": "Use a fin comb to straighten any bent fins.",
+          "required_tool_id": 33,
+          "required_tool_name": "FinComb",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 7,
+          "message": "Wash the evaporator coil (1) with warm to hot water and a small quantity of detergent. The hot water softens the bristles helps the grease to dissolve and removes the chlorides.",
+          "required_tool_id": 17,
+          "required_tool_name": "BristleBrush",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 8,
+          "message": "Clean the drain tray (2) with wet cloth",
+          "required_tool_id": 118,
+          "required_tool_name": "WetCloth",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 9,
+          "message": "Ensure that there is no condensate or debris left over on the drain tray (2).",
+          "required_tool_id": 111,
+          "required_tool_name": "VacuumCleaner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 10,
+          "message": "Remove the grommet on the drain hole cover.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 11,
+          "message": "Place the hose inside the hole and use high pressure to remove the debris from the drain hole.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 12,
+          "message": "Ensure that draining is done completely through the drain tube (3).",
+          "required_tool_id": 27,
+          "required_tool_name": "CompressedAirGun",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 13,
+          "message": "Check for leaks in TX Valve",
+          "required_tool_id": 31,
+          "required_tool_name": "ElectronicLeakDetector",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 14,
+          "message": "Fix TX valve with spanner",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 15,
+          "message": "Remove TX valve if necessary",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 16,
+          "message": "Replace TX valve if necessary",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 17,
+          "message": "Check working",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        }
+      ]
+    },
+    {
+      "fault_code": 105,
+      "fault_name": "Suction low and discharge low",
+      "total_steps": 16,
+      "steps": [
+        {
+          "step_number": 1,
+          "message": "Remove Condenser Mesh with lifting device",
+          "required_tool_id": 56,
+          "required_tool_name": "LiftingDevice",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 2,
+          "message": "Remove Condenser Coil & Filter with lifting device",
+          "required_tool_id": 56,
+          "required_tool_name": "LiftingDevice",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 3,
+          "message": "Check for leaks using Electronic leak detector",
+          "required_tool_id": 31,
+          "required_tool_name": "ElectronicLeakDetector",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 4,
+          "message": "Open Filter Drier Cover",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 5,
+          "message": "Remove Filter Drier",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 6,
+          "message": "Replace Filter Drier",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 7,
+          "message": "Check LP/HP",
+          "required_tool_id": 60,
+          "required_tool_name": "ManifoldGaugeSet",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 8,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 9,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 10,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 11,
+          "message": "Check temperature of solenoid valve using clamp thermometer",
+          "required_tool_id": 22,
+          "required_tool_name": "ClampThermometer",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 12,
+          "message": "Unscrew solenoid valve using spanner",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 13,
+          "message": "Remove solenoid valve",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 14,
+          "message": "Replace solenoid valve",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 15,
+          "message": "Screw solenoid valve using spanner",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 16,
+          "message": "Check HVAC working",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        }
+      ]
+    },
+    {
+      "fault_code": 106,
+      "fault_name": "High suction and high discharge",
+      "total_steps": 29,
+      "steps": [
+        {
+          "step_number": 1,
+          "message": "Unscrew Fan cover bolt",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 2,
+          "message": "Open fan cover",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 3,
+          "message": "Unscrews Fan Motor Bolt",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 4,
+          "message": "Remove Fan Motor",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 5,
+          "message": "Replace Fan Motor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 6,
+          "message": "Clean the condenser fan with dry compressed air",
+          "required_tool_id": 25,
+          "required_tool_name": "CompressedAir",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 7,
+          "message": "Unscrew condenser fan bolt",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 8,
+          "message": "Remove condenser fan",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 9,
+          "message": "Replace condenser fan",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 10,
+          "message": "Remove the condenser coil cover",
+          "required_tool_id": 56,
+          "required_tool_name": "LiftingDevice",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 11,
+          "message": "Clean condenser coil",
+          "required_tool_id": 17,
+          "required_tool_name": "BristleBrush",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 12,
+          "message": "Straighten any bent fins with a fin comb",
+          "required_tool_id": 33,
+          "required_tool_name": "FinComb",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 13,
+          "message": "Clean the coil with compressed air",
+          "required_tool_id": 25,
+          "required_tool_name": "CompressedAir",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 14,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 15,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 16,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 17,
+          "message": "Open supply air blower",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 18,
+          "message": "Clean the supply air blower (1) with compressed air.",
+          "required_tool_id": 27,
+          "required_tool_name": "CompressedAirGun",
+          "component_name": "Air Blower",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 19,
+          "message": "Rotate supply air blower (1) motor with hand and ensure that only a light force is required to rotate it.",
+          "required_tool_id": 49,
+          "required_tool_name": "InsulatedHandGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 20,
+          "message": "Remove supply air blower",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 21,
+          "message": "Replace supply air blower",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 22,
+          "message": "Close air supply blower",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 23,
+          "message": "Unscrew bottom panel",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 24,
+          "message": "Remove bottom panel",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 25,
+          "message": "Unscrew return air damper",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 26,
+          "message": "Remove return air damper",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 27,
+          "message": "Check moisture indicator on the sight glass (1) to find any excessive moisture in the system.",
+          "required_tool_id": 31,
+          "required_tool_name": "ElectronicLeakDetector",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 28,
+          "message": "Locate the leak and repair",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 29,
+          "message": "Check working",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        }
+      ]
+    },
+    {
+      "fault_code": 107,
+      "fault_name": "Compressor not operating",
+      "total_steps": 49,
+      "steps": [
+        {
+          "step_number": 1,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 2,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 3,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 4,
+          "message": "Remove electrical control panel assembly",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Electric control panel",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 5,
+          "message": "Check all circuit breakers and close.",
+          "required_tool_id": 63,
+          "required_tool_name": "Multimeter",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 6,
+          "message": "Unplug the connected wires",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 7,
+          "message": "Remove electrical plugs.",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 8,
+          "message": "Replace the plugs",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 9,
+          "message": "Connect the electrical plugs.",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 10,
+          "message": "Close electrical control panel assembly",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 11,
+          "message": "Unscrew bolt compressor unit cover",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 12,
+          "message": "Compressor Cover Removal",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 13,
+          "message": "Clean the dust on the component with a soft bristle brush (with the metal part insulated)",
+          "required_tool_id": 17,
+          "required_tool_name": "BristleBrush",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 14,
+          "message": "Ensure compressor is not over heated",
+          "required_tool_id": 22,
+          "required_tool_name": "ClampThermometer",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 15,
+          "message": "Unscrew Fan bolt",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 16,
+          "message": "Open fan cover",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 17,
+          "message": "Unscrews Fan Motor Bolt",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 18,
+          "message": "Remove Fan Motor",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 19,
+          "message": "Replace Fan Motor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 20,
+          "message": "Clean the condenser fan with dry compressed air",
+          "required_tool_id": 25,
+          "required_tool_name": "CompressedAir",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 21,
+          "message": "Unscrew condenser fan bolt",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 22,
+          "message": "Remove condenser fan",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 23,
+          "message": "Replace condenser fan",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 24,
+          "message": "Remove the condenser coil cover",
+          "required_tool_id": 56,
+          "required_tool_name": "LiftingDevice",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 25,
+          "message": "Clean condenser coil",
+          "required_tool_id": 17,
+          "required_tool_name": "BristleBrush",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 26,
+          "message": "Straighten any bent fins with a fin comb",
+          "required_tool_id": 33,
+          "required_tool_name": "FinComb",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 27,
+          "message": "Clean the coil with compressed air",
+          "required_tool_id": 25,
+          "required_tool_name": "CompressedAir",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 28,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 29,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 30,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 31,
+          "message": "Open supply air blower",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 32,
+          "message": "Clean the supply air blower (1) with compressed air.",
+          "required_tool_id": 27,
+          "required_tool_name": "CompressedAirGun",
+          "component_name": "Air Blower",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 33,
+          "message": "Rotate supply air blower (1) motor with hand and ensure that only a light force is required to rotate it.",
+          "required_tool_id": 49,
+          "required_tool_name": "InsulatedHandGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 34,
+          "message": "Remove supply air blower",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 35,
+          "message": "Replace supply air blower",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 36,
+          "message": "Close air supply blower",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 37,
+          "message": "Unscrew bottom panel",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 38,
+          "message": "Remove bottom panel",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 39,
+          "message": "Unscrew return air damper",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 40,
+          "message": "Remove return air damper",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 41,
+          "message": "Check moisture indicator on the sight glass (1) to find any excessive moisture in the system.",
+          "required_tool_id": 31,
+          "required_tool_name": "ElectronicLeakDetector",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 42,
+          "message": "Locate the leak and repair",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 43,
+          "message": "Unbolt the return air temperature sensor",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 44,
+          "message": "Remove the return air temperature sensor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 45,
+          "message": "Replace the return air temperature sensor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 46,
+          "message": "Secure the RAT sensor bolt",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 47,
+          "message": "Check the temperature sensors for any damage",
+          "required_tool_id": 22,
+          "required_tool_name": "ClampThermometer",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 48,
+          "message": "Place external calibrated temperature sensor close to the return air temperature sensor.",
+          "required_tool_id": 20,
+          "required_tool_name": "CalibratedThermometer",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 49,
+          "message": "Check working",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        }
+      ]
+    },
+    {
+      "fault_code": 108,
+      "fault_name": "Reduced cooling",
+      "total_steps": 45,
+      "steps": [
+        {
+          "step_number": 1,
+          "message": "Unscrew bottom panel",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 2,
+          "message": "Remove bottom panel",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 3,
+          "message": "Unscrew return air damper",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 4,
+          "message": "Remove return air damper",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 5,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 6,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 7,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 8,
+          "message": "Remove Heat bank screws",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 9,
+          "message": "Remove Heat bank assembly",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 10,
+          "message": "Replace Heat bank assembly",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 11,
+          "message": "Use a fin comb to straighten any bent fins.",
+          "required_tool_id": 33,
+          "required_tool_name": "FinComb",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 12,
+          "message": "Wash the evaporator coil (1) with warm to hot water and a small quantity of detergent. The hot water softens the bristles helps the grease to dissolve and removes the chlorides.",
+          "required_tool_id": 17,
+          "required_tool_name": "BristleBrush",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 13,
+          "message": "Clean the drain tray (2) with wet cloth",
+          "required_tool_id": 118,
+          "required_tool_name": "WetCloth",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 14,
+          "message": "Ensure that there is no condensate or debris left over on the drain tray (2).",
+          "required_tool_id": 111,
+          "required_tool_name": "VacuumCleaner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 15,
+          "message": "Remove the grommet on the drain hole cover.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 16,
+          "message": "Place the hose inside the hole and use high pressure to remove the debris from the drain hole.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 17,
+          "message": "Fix TX valve with spanner",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 18,
+          "message": "Remove TX valve if necessary",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 19,
+          "message": "Replace TX valve if necessary",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 20,
+          "message": "Remove the condenser coil cover",
+          "required_tool_id": 56,
+          "required_tool_name": "LiftingDevice",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 21,
+          "message": "Clean condenser coil",
+          "required_tool_id": 17,
+          "required_tool_name": "BristleBrush",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 22,
+          "message": "Straighten any bent fins with a fin comb",
+          "required_tool_id": 33,
+          "required_tool_name": "FinComb",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 23,
+          "message": "Clean the coil with compressed air",
+          "required_tool_id": 25,
+          "required_tool_name": "CompressedAir",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 24,
+          "message": "Close HVAC components",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 25,
+          "message": "Unscrew bolt compressor unit cover",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 26,
+          "message": "Compressor Cover Removal",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 27,
+          "message": "Check compressor of excessive noise or leaks",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 28,
+          "message": "Unscrew compressor bolt",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 29,
+          "message": "Remove the compressor",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 30,
+          "message": "Replace the compressor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 31,
+          "message": "Check hp lp pressure using manifold gauge set",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 32,
+          "message": "Unscrew Fan bolt",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 33,
+          "message": "Open fan cover",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 34,
+          "message": "Remove the compressor",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 35,
+          "message": "Replace the compressor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 36,
+          "message": "Close HVAC components",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 37,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 38,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 39,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 40,
+          "message": "Check temperature of solenoid valve using clamp thermometer",
+          "required_tool_id": 22,
+          "required_tool_name": "ClampThermometer",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 41,
+          "message": "Unscrew solenoid valve using spanner",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 42,
+          "message": "Remove solenoid valve",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 43,
+          "message": "Replace solenoid valve",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 44,
+          "message": "Screw solenoid valve using spanner",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 45,
+          "message": "Close HVAC components",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        }
+      ]
+    },
+    {
+      "fault_code": 109,
+      "fault_name": "No Heating",
+      "total_steps": 22,
+      "steps": [
+        {
+          "step_number": 1,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 2,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 3,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 4,
+          "message": "Remove electrical control panel assembly",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Electric control panel",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 5,
+          "message": "Check all circuit breakers and close.",
+          "required_tool_id": 63,
+          "required_tool_name": "Multimeter",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 6,
+          "message": "Unplug the connected wires",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 7,
+          "message": "Remove electrical plugs.",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 8,
+          "message": "Replace the plugs",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 9,
+          "message": "Tighten loose connection of circuit breakers",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 10,
+          "message": "Circuit Breaker Cleaning",
+          "required_tool_id": 17,
+          "required_tool_name": "BristleBrush",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 11,
+          "message": "Close electrical control panel assembly",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 12,
+          "message": "Check Heat Bank",
+          "required_tool_id": 22,
+          "required_tool_name": "ClampThermometer",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 13,
+          "message": "Heat bank damaged",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 14,
+          "message": "Remove Heat bank screws",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 15,
+          "message": "Remove Heat bank assembly",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 16,
+          "message": "Replace Heat bank assembly",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 17,
+          "message": "Clean Heat bank",
+          "required_tool_id": 27,
+          "required_tool_name": "CompressedAirGun",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 18,
+          "message": "Unbolt the return air temperature sensor",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 19,
+          "message": "Remove the return air temperature sensor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 20,
+          "message": "Replace the return air temperature sensor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 21,
+          "message": "Bolt the RAT",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 22,
+          "message": "Check working",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        }
+      ]
+    },
+    {
+      "fault_code": 110,
+      "fault_name": "Over Cooling",
+      "total_steps": 17,
+      "steps": [
+        {
+          "step_number": 1,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 2,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 3,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 4,
+          "message": "Open supply air cover",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 5,
+          "message": "Remove FAT Bolt",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 6,
+          "message": "Replace with new FAT Sensor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 7,
+          "message": "Secure with FAT bolt",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 8,
+          "message": "Remove SAT Bolt",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 9,
+          "message": "Remove SAT Sensor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 10,
+          "message": "Replace with new SAT Sensor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 11,
+          "message": "Secure with SAT Bolt",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 12,
+          "message": "Unbolt the return air temperature sensor",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 13,
+          "message": "Remove the return air temperature sensor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 14,
+          "message": "Replace the return air temperature sensor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 15,
+          "message": "Secure the RAT sensor bolt",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 16,
+          "message": "Tighten the fastener of RAT",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 17,
+          "message": "Check working",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        }
+      ]
+    },
+    {
+      "fault_code": 111,
+      "fault_name": "Over Heating",
+      "total_steps": 11,
+      "steps": [
+        {
+          "step_number": 1,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 2,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 3,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 4,
+          "message": "Check the temperature sensors for any damage",
+          "required_tool_id": 22,
+          "required_tool_name": "ClampThermometer",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 5,
+          "message": "RAT Damaged",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 6,
+          "message": "Unbolt the return air temperature sensor",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 7,
+          "message": "Remove the return air temperature sensor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 8,
+          "message": "Replace the return air temperature sensor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 9,
+          "message": "Secure the RAT sensor bolt",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 10,
+          "message": "Tighten the fastener of RAT",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 11,
+          "message": "Check working",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        }
+      ]
+    },
+    {
+      "fault_code": 112,
+      "fault_name": "No emergency ventilation",
+      "total_steps": 17,
+      "steps": [
+        {
+          "step_number": 1,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 2,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 3,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 4,
+          "message": "Remove electrical control panel assembly",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Electric control panel",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 5,
+          "message": "Check all circuit breakers and close.",
+          "required_tool_id": 63,
+          "required_tool_name": "Multimeter",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 6,
+          "message": "Unplug the connected wires",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 7,
+          "message": "Remove electrical plugs.",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 8,
+          "message": "Replace the plugs",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 9,
+          "message": "Connect the electrical plugs.",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 10,
+          "message": "Close electrical control panel assembly",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 11,
+          "message": "DB9 Connection Clarification Pending",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 0,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 12,
+          "message": "Remove Converter Bolts",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 13,
+          "message": "Converter Removal",
+          "required_tool_id": 56,
+          "required_tool_name": "LiftingDevice",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 14,
+          "message": "Check for short circuit using multimeter",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 15,
+          "message": "Put converter back to it place",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 16,
+          "message": "Secure converter with bolts",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 17,
+          "message": "Check working",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        }
+      ]
+    },
+    {
+      "fault_code": 113,
+      "fault_name": "Smoke identified in saloon",
+      "total_steps": 15,
+      "steps": [
+        {
+          "step_number": 1,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 2,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 3,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 4,
+          "message": "Remove the fresh air dampers",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 5,
+          "message": "Replace the fresh air dampers",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 6,
+          "message": "Unscrew fresh air filter bolt",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 7,
+          "message": "Replace fresh air filter",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 8,
+          "message": "Remove fresh air damper motor",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 9,
+          "message": "Replace fresh air damper motor",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 10,
+          "message": "Clean Smoke Detector",
+          "required_tool_id": 17,
+          "required_tool_name": "BristleBrush",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 11,
+          "message": "Remove Smoke Detector Bolts",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 12,
+          "message": "Remove Smoke Detector unit",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 13,
+          "message": "Replace Smoke Detector unit",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 14,
+          "message": "Secure Smoke Detector Bolts",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 15,
+          "message": "Check working",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        }
+      ]
+    },
+    {
+      "fault_code": 114,
+      "fault_name": "Compressor is excessively noisy | Condenser Fan or Supply air Blower",
+      "total_steps": 69,
+      "steps": [
+        {
+          "step_number": 1,
+          "message": "Run HVAC 20 mins.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 2,
+          "message": "Unusual noise from compressor assembly",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 0,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 3,
+          "message": "Unscrew bolt compressor unit cover",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 4,
+          "message": "Compressor Cover Removal",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 5,
+          "message": "Check hp lp pressure using manifold gauge set",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 6,
+          "message": "Unscrew compressor bolt",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 7,
+          "message": "Remove the compressor",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 8,
+          "message": "Replace the compressor",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 9,
+          "message": "Compressor Cover close",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 10,
+          "message": "Screw bolt compressor unit cover",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 11,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 12,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 13,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 14,
+          "message": "Remove electrical control panel assembly",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Electric control panel",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 15,
+          "message": "Check all circuit breakers and close.",
+          "required_tool_id": 63,
+          "required_tool_name": "Multimeter",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 16,
+          "message": "Unplug the connected wires",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 17,
+          "message": "Remove electrical plugs.",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 18,
+          "message": "Replace the plugs",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 19,
+          "message": "Connect the electrical plugs.",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 20,
+          "message": "Close electrical control panel assembly",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 21,
+          "message": "Remove Heat bank screws",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 22,
+          "message": "Remove Heat bank assembly",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 23,
+          "message": "Replace Heat bank assembly",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 24,
+          "message": "Clean Heat bank",
+          "required_tool_id": 27,
+          "required_tool_name": "CompressedAirGun",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 25,
+          "message": "Secure the Heat bank screws",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 26,
+          "message": "Run HVAC 20 mins.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 27,
+          "message": "Unusual noise from compressor assembly",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 0,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 28,
+          "message": "Unscrew bolt compressor unit cover",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 29,
+          "message": "Compressor Cover Removal",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 30,
+          "message": "Check hp lp pressure using manifold gauge set",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 31,
+          "message": "Compressor Cover close",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 32,
+          "message": "Screw bolt compressor unit cover",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 33,
+          "message": "Unscrew bottom panel",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 34,
+          "message": "Remove bottom panel",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 35,
+          "message": "Unscrew return air damper",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 36,
+          "message": "Remove return air damper",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 37,
+          "message": "Unscrew Fan cover bolt",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 38,
+          "message": "Open fan cover",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 39,
+          "message": "Clean the condenser fan with dry compressed air",
+          "required_tool_id": 25,
+          "required_tool_name": "CompressedAir",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 40,
+          "message": "Unscrew condenser fan bolt",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 41,
+          "message": "Remove condenser fan",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 42,
+          "message": "Replace condenser fan",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 43,
+          "message": "Close fan cover",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 44,
+          "message": "Secure Fan cover bolt",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 45,
+          "message": "Run HVAC 20 mins.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 46,
+          "message": "Loosen and remove 24 nos M8X20 bolts (8) along with washer set (7) to open evaporator cover (9).",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "Evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 47,
+          "message": "Remove hinge pins to remove the evaporator cover (9) from HVAC unit.",
+          "required_tool_id": 70,
+          "required_tool_name": "Pliers",
+          "component_name": "Hinge pins",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 48,
+          "message": "Remove the evaporator cover (9) from HVAC unit using suitable lifting device.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "evaporator cover",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 49,
+          "message": "Unusual noise from supply air blower",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 0,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 50,
+          "message": "Open supply air cover",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 51,
+          "message": "Remove supply air blower",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 52,
+          "message": "Replace supply air blower",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 53,
+          "message": "Close supply air cover",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 54,
+          "message": "Check for leaks in TX Valve",
+          "required_tool_id": 31,
+          "required_tool_name": "ElectronicLeakDetector",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 55,
+          "message": "Close the evaporator cover",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 56,
+          "message": "Fix hinge pins to close the evaporator cover",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 57,
+          "message": "Secure 24 nos M8X20 bolts (to close evaporator cover",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "Evaporator cover",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 58,
+          "message": "Remove Condenser Mesh with lifting device",
+          "required_tool_id": 56,
+          "required_tool_name": "LiftingDevice",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 59,
+          "message": "Remove Condenser Coil & Filter with lifting device",
+          "required_tool_id": 56,
+          "required_tool_name": "LiftingDevice",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 60,
+          "message": "Open Filter Drier Cover",
+          "required_tool_id": 83,
+          "required_tool_name": "Screwdriver",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 61,
+          "message": "Remove Filter Drier",
+          "required_tool_id": 51,
+          "required_tool_name": "InsulatedGloves",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 62,
+          "message": "Replace Filter Drier",
+          "required_tool_id": 116,
+          "required_tool_name": "VisualInspection",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 63,
+          "message": "Close Filter Drier Cover",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 64,
+          "message": "Place Condenser Coil & Filter with lifting device",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 65,
+          "message": "Place Condenser Mesh with lifting device",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": -1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 66,
+          "message": "Run HVAC 20 mins.",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 67,
+          "message": "Unusual noise from HVAC Unit",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 0,
+          "is_visual_inspection": true
+        },
+        {
+          "step_number": 68,
+          "message": "Tighten HVAC unit connection",
+          "required_tool_id": 95,
+          "required_tool_name": "Spanner",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": false
+        },
+        {
+          "step_number": 69,
+          "message": "Check working",
+          "required_tool_id": -1,
+          "required_tool_name": "None",
+          "component_name": "ComponentCode:",
+          "animation_speed": 1,
+          "is_visual_inspection": true
+        }
+      ]
+    }
+  ]
+}
